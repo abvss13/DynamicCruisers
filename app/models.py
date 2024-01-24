@@ -42,10 +42,20 @@ class Vehicle(db.Model, SerializerMixin):
     
     # Relationships
     dealerships_id = db.relationship('Dealership', secondary='vehicle_dealership', backref='vehicles', lazy=True)
-    reviews_id = db.relationship('Reviews', backref='vehicles', lazy=True)
+    reviews_id = db.relationship('Review', backref='vehicles', lazy=True)
 
     def __repr__(self):
         return f"Vehicle('{self.make}', '{self.model}', '{self.year}')"
+    
+
+# Association table that caters for the many-to-many relationship
+
+user_vehicle = db.Table(
+    'user_vehicle',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('vehicle_id', db.Integer, db.ForeignKey('vehicles.id'), primary_key=True)
+)
+
     
 class Dealership(db.Model, SerializerMixin):
     __tablename__ = 'dealerships'
