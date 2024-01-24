@@ -37,7 +37,7 @@ class Vehicle(db.Model, SerializerMixin):
     availability = db.Column(db.Boolean, nullable=False, default=True)
     numbers_available = db.Column(db.Integer, nullable=False, default=1)
 
-    likes = db.column(db.Integer, nullable=False, default=0)
+    likes = db.Column(db.Integer, nullable=False, default=0)
     image = db.Column(db.String(20), nullable=False, default='default.jpg')
     
     # Relationships
