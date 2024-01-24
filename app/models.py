@@ -10,7 +10,8 @@ db = SQLAlchemy()
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
+    firstname = db.Column(db.String(50), unique=True, nullable=False)
+    lastname = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     
@@ -21,7 +22,7 @@ class User(UserMixin, db.Model):
     vehicles_owned = db.relationship('Vehicle', secondary='user_vehicle', backref='users', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}')"
+        return f"User('{self.firstname}', '{self.lastname}', '{self.email}')"
     
 class Vehicle(db.Model, SerializerMixin):
     __tablename__ = 'vehicles'
