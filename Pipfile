@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 flask = "2.0.0"
-flask-cors = "*"
+flask-cors = "3.0.10"
 flask-migrate = "*"
 sqlalchemy = "1.4.0"
 flask_login = "*"
@@ -13,7 +13,7 @@ flask_sqlalchemy = "*"
 sqlalchemy-serializer = "*"
 faker = "*"
 flask-restful = "*"
-werkzeug = "*"
+werkzeug = "2.0.0"
 
 [dev-packages]
 
