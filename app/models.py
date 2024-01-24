@@ -110,3 +110,16 @@ class Rating (db.Model):
     def __repr__(self):
         return f"Rating('{self.rating}')"
     
+
+class UserVehicle(db.Model):
+    __tablename__ = 'user_vehicle'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'), nullable=False)
+
+    # Additional fields if needed...
+
+    def __repr__(self):
+        return f"UserVehicle('{self.user_id}', '{self.vehicle_id}')"
+    
