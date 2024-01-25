@@ -1,26 +1,35 @@
 import React from 'react'
-import { PiWarehouseBold } from "react-icons/pi";
-import { IoCarSportOutline } from "react-icons/io5";
-import Link from 'next/link'
+import Image from 'next/image'
+import Background1 from '../images/Background/Background1.jpg'
+
 
 function Body() {
     return (
         <div className='body'>
-            <h1>Welcome to the no. 1 care dealership website!!</h1>
-            <h2>Here you can find the best car that suits your needs</h2>
-            <h3>Let us start by visiting our delership options or view available cars...</h3>
-            <br />
-            <br />
-            <div className="navlinks" >
-                <Link href='/dealerships' className="dealers">
-                    <PiWarehouseBold size={60} />
-                    <h4>Dealers</h4>
-                </Link>
-
-                <Link href='/vehicles' className="cars">
-                    <IoCarSportOutline size={60} />
-                    <h4>Cars</h4>
-                </Link>
+            <div className='body__image'>
+                <Image
+                    src={Background1}
+                    alt="Background Image"
+                    layout="fill"
+                    objectFit="cover"
+                    quality={100}
+                />
+            </div>
+            <div className='body__container'>
+                <div className='body__container__text'>
+                    <h1>Find the best car for you</h1>
+                    <p>Find the best car that suits your needs. We have a wide range of cars for you to choose from.</p>
+                </div>
+                <div className='body__container__icons'>
+                    <div className='body__container__icons__icon'>
+                        <PiWarehouseBold />
+                        <p>Wide range of cars</p>
+                    </div>
+                    <div className='body__container__icons__icon'>
+                        <IoCarSportOutline />
+                        <p>Best prices</p>
+                    </div>
+                </div>
             </div>
         </div>
     )
