@@ -19,6 +19,12 @@
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     text-decoration: none;
     justify-content: end;
+
+    .search__bar .select__brands {
+        justify-content: end;
+        margin-right: 850px;
+        margin-top: 40px;
+    }
   }
 
   .nav__links__container {
@@ -35,6 +41,7 @@
       border-radius: 10px;
       box-shadow: darkgreen 0px 2px;
     }
+
   }
 
   .nav__links__container__text {

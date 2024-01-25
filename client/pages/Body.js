@@ -25,6 +25,22 @@ function Body() {
                 />
             </div>
             <div className='nav__links'>
+                <div className='search__bar'>
+                    <div className='select__brands'>
+                        <select name="cars" id="cars">
+                            <option value="select">Select Brand</option>
+                            <option value="cadillac">Cadillac</option>
+                            <option value="toyota">Toyota</option>
+                            <option value="mercedes">Mercedes</option>
+                            <option value="porshe">Porshe</option>
+                            <option value="chevrolet">Chevrolet</option>
+                            <option value="nissan">Nissan</option>
+                            <option value="jeep">Jeep</option>
+                            <option value="rolls-royce">Rolls-Royce</option>
+                            <option value="bmw">BMW</option>
+                        </select>
+                    </div>
+                </div>
                 <div className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <PiWarehouseBold size={30} />
@@ -63,20 +79,6 @@ function Body() {
                     <h1>Used and New cars for sale in Nairobi...</h1>
                     <br />
                     <h3>...Shop by brand...</h3>
-                </div>
-                <div className='select__brands'>
-                    <select name="cars" id="cars">
-                        <option value="select">Select Brand</option>
-                        <option value="cadillac">Cadillac</option>
-                        <option value="toyota">Toyota</option>
-                        <option value="mercedes">Mercedes</option>
-                        <option value="porshe">Porshe</option>
-                        <option value="chevrolet">Chevrolet</option>
-                        <option value="nissan">Nissan</option>
-                        <option value="jeep">Jeep</option>
-                        <option value="rolls-royce">Rolls-Royce</option>
-                        <option value="bmw">BMW</option>
-                    </select>
                 </div>
             </div>
         </div >
