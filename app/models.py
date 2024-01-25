@@ -7,8 +7,10 @@ from sqlalchemy_serializer import SerializerMixin
 
 db = SQLAlchemy()
 
+#usermixin is used to manage usersessions
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(50), unique=True, nullable=False)
     lastname = db.Column(db.String(50), unique=True, nullable=False)
@@ -26,24 +28,51 @@ class User(UserMixin, db.Model):
     
 class Vehicle(db.Model, SerializerMixin):
     __tablename__ = 'vehicles'
+
     id = db.Column(db.Integer, primary_key=True)
     make = db.Column(db.String(50), nullable=False)
     model = db.Column(db.String(50), nullable=False)
     year = db.Column(db.Integer, nullable=False)
+
     availability = db.Column(db.Boolean, nullable=False, default=True)
     numbers_available = db.Column(db.Integer, nullable=False, default=1)
-    likes = db.column(db.Integer, nullable=False, default=0)
+
+    likes = db.Column(db.Integer, nullable=False, default=0)
     image = db.Column(db.String(20), nullable=False, default='default.jpg')
     
     # Relationships
     dealerships_id = db.relationship('Dealership', secondary='vehicle_dealership', backref='vehicles', lazy=True)
-    reviews_id = db.relationship('Reviews', backref='vehicles', lazy=True)
+    reviews_id = db.relationship('Review', backref='vehicles', lazy=True)
 
     def __repr__(self):
         return f"Vehicle('{self.make}', '{self.model}', '{self.year}')"
     
+
+# # Association table that caters for the many-to-many relationship
+
+# user_vehicle = db.Table(
+#     'user_vehicle',
+#     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+#     db.Column('vehicle_id', db.Integer, db.ForeignKey('vehicles.id'), primary_key=True)
+#     extend_existing=True #allows us to redefine the table without raising an error
+# )
+
+#a dedicated model class for the association
+class UserVehicle(db.Model):
+    __tablename__ = 'user_vehicle'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'), nullable=False)
+
+    # Additional fields if needed...
+
+    def __repr__(self):
+        return f"UserVehicle('{self.user_id}', '{self.vehicle_id}')"
+    
 class Dealership(db.Model, SerializerMixin):
     __tablename__ = 'dealerships'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(100), nullable=False)
@@ -53,12 +82,27 @@ class Dealership(db.Model, SerializerMixin):
     def __repr__(self):
         return f"Dealership('{self.name}', '{self.city}', '{self.state}')"
     
+
+class VehicleDealership(db.Model):
+    __tablename__ = 'vehicle_dealership'
+
+    id = db.Column(db.Integer, primary_key=True)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'), nullable=False)
+    dealership_id = db.Column(db.Integer, db.ForeignKey('dealerships.id'), nullable=False)
+
+    # Additional fields if needed...
+
+    def __repr__(self):
+        return f"VehicleDealership('{self.vehicle_id}', '{self.dealership_id}')"
+
+    
 class Review (db.Model):
     __tablename__ = 'reviews'
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date_posted = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow)
     
     # Relationships
     user_id = db.relationship('User', backref='reviews', lazy=True)
@@ -70,6 +114,7 @@ class Review (db.Model):
     
 class Likes (db.Model):
     __tablename__ = 'likes'
+
     id = db.Column(db.Integer, primary_key=True)
     
     # Relationships
@@ -81,6 +126,7 @@ class Likes (db.Model):
     
 class Rating (db.Model):
     __tablename__ = 'ratings'
+    
     id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.Integer, nullable=False)
     
@@ -90,4 +136,6 @@ class Rating (db.Model):
     
     def __repr__(self):
         return f"Rating('{self.rating}')"
+    
+
     
