@@ -56,6 +56,81 @@ function Body() {
             <div className='body__container'>
                 <div className='body__container__text'>
                     <h1>Used and New cars for sale in Nairobi...</h1>
+                    <br />
+                    <h3>...Shop by brand...</h3>
+                </div>
+                <div className='body__container__brands'>
+                    <div className='body__container__brands__container'>
+                        <div className='body__container__brands__container__image'>
+                            <Image
+                                src='/images/brands/Toyota.png'
+                                alt="Toyota"
+                                layout="fill"
+                                objectFit="contain"
+                                quality={100}
+                            />
+                        </div>
+                        <div className='body__container__brands__container__text'>
+                            <h3>Toyota</h3>
+                        </div>
+                    </div>
+                    <div className='body__container__brands__container'>
+                        <div className='body__container__brands__container__image'>
+                            <Image
+                                src='/images/brands/Nissan.png'
+                                alt="Nissan"
+                                layout="fill"
+                                objectFit="contain"
+                                quality={100}
+                            />
+                        </div>
+                        <div className='body__container__brands__container__text'>
+                            <h3>Nissan</h3>
+                        </div>
+                    </div>
+                    <div className='body__container__brands__container'>
+                        <div className='body__container__brands__container__image'>
+                            <Image
+                                src='/images/brands/Subaru.png'
+                                alt="Subaru"
+                                layout="fill"
+                                objectFit="contain"
+                                quality={100}
+                            />
+                        </div>
+                        <div className='body__container__brands__container__text'>
+                            <h3>Jeep</h3>
+                        </div>
+                    </div>
+                    <div className='body__container__brands__container'>
+                        <div className='body__container__brands__container__image'>
+                            <Image
+                                src='/images/brands/Mercedes.png'
+                                alt="Mercedes"
+                                layout="fill"
+                                objectFit="contain"
+                                quality={100}
+                            />
+                        </div>
+                        <div className='body__container__brands__container__text'>
+                            <h3>Mercedes</h3>
+                        </div>
+                    </div>
+                    <div className='body__container__brands__container'>
+                        <div className='body__container__brands__container__image'>
+                            <Image
+                                src='/images/brands/Mazda.png'
+                                alt="Mazda"
+                                layout="fill"
+                                objectFit="contain"
+                                quality={100}
+                            />
+                        </div>
+                        <div className='body__container__brands__container__
+                        text'>
+                            <h3>BMW</h3>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div >
