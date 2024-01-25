@@ -1,8 +1,13 @@
 import React from 'react'
+import Header from './Header'
+import Body from './Body'
 
 function index() {
   return (
-    <div>Dynamic Cruisers</div>
+    <div>
+       <Header />
+        <Body />
+    </div>
   )
 }
 
