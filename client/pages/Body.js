@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import Background1 from '../images/Background/Background1.jpg'
+import Background1 from '../Public/Background/Background1.jpg'
 
 
 function Body() {
