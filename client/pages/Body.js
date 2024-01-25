@@ -4,7 +4,12 @@ import { PiWarehouseBold } from 'react-icons/pi';
 import { IoCarSportOutline } from 'react-icons/io5';
 import { GoCodeReview } from "react-icons/go";
 import { IoMdLogIn } from "react-icons/io";
-import Background1 from '../Public/Background/Background1.jpg';
+import Background1 from '../Public/_background/Background1.jpg';
+import BMWlogo from '../Public/_logos/BMW-logo.jpg';
+import Jeeplogo from '../Public/_logos/Jeep-logo.png';
+import Mercedeslogo from '../Public/_logos/Mercedes-logo.jpg';
+import Nissanlogo from '../Public/_logos/Nissan-logo.jpg';
+import Toyotalogo from '../Public/_logos/Toyota-logo.jpg';
 
 
 function Body() {
@@ -59,78 +64,19 @@ function Body() {
                     <br />
                     <h3>...Shop by brand...</h3>
                 </div>
-                <div className='body__container__brands'>
-                    <div className='body__container__brands__container'>
-                        <div className='body__container__brands__container__image'>
-                            <Image
-                                src='/images/brands/Toyota.png'
-                                alt="Toyota"
-                                layout="fill"
-                                objectFit="contain"
-                                quality={100}
-                            />
-                        </div>
-                        <div className='body__container__brands__container__text'>
-                            <h3>Toyota</h3>
-                        </div>
-                    </div>
-                    <div className='body__container__brands__container'>
-                        <div className='body__container__brands__container__image'>
-                            <Image
-                                src='/images/brands/Nissan.png'
-                                alt="Nissan"
-                                layout="fill"
-                                objectFit="contain"
-                                quality={100}
-                            />
-                        </div>
-                        <div className='body__container__brands__container__text'>
-                            <h3>Nissan</h3>
-                        </div>
-                    </div>
-                    <div className='body__container__brands__container'>
-                        <div className='body__container__brands__container__image'>
-                            <Image
-                                src='/images/brands/Subaru.png'
-                                alt="Subaru"
-                                layout="fill"
-                                objectFit="contain"
-                                quality={100}
-                            />
-                        </div>
-                        <div className='body__container__brands__container__text'>
-                            <h3>Jeep</h3>
-                        </div>
-                    </div>
-                    <div className='body__container__brands__container'>
-                        <div className='body__container__brands__container__image'>
-                            <Image
-                                src='/images/brands/Mercedes.png'
-                                alt="Mercedes"
-                                layout="fill"
-                                objectFit="contain"
-                                quality={100}
-                            />
-                        </div>
-                        <div className='body__container__brands__container__text'>
-                            <h3>Mercedes</h3>
-                        </div>
-                    </div>
-                    <div className='body__container__brands__container'>
-                        <div className='body__container__brands__container__image'>
-                            <Image
-                                src='/images/brands/Mazda.png'
-                                alt="Mazda"
-                                layout="fill"
-                                objectFit="contain"
-                                quality={100}
-                            />
-                        </div>
-                        <div className='body__container__brands__container__
-                        text'>
-                            <h3>BMW</h3>
-                        </div>
-                    </div>
+                <div className='select__brands'>
+                    <select name="cars" id="cars">
+                        <option value="select">Select Brand</option>
+                        <option value="cadillac">Cadillac</option>
+                        <option value="toyota">Toyota</option>
+                        <option value="mercedes">Mercedes</option>
+                        <option value="porshe">Porshe</option>
+                        <option value="chevrolet">Chevrolet</option>
+                        <option value="nissan">Nissan</option>
+                        <option value="jeep">Jeep</option>
+                        <option value="rolls-royce">Rolls-Royce</option>
+                        <option value="bmw">BMW</option>
+                    </select>
                 </div>
             </div>
         </div >
