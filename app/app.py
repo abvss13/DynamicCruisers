@@ -12,10 +12,9 @@ CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.json.compact = False
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
-CORS(app)
-#
+
 #database initialization and migration
 migrate = Migrate(app, db)
 

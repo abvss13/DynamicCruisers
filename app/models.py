@@ -48,13 +48,14 @@ class Vehicle(db.Model, SerializerMixin):
         return f"Vehicle('{self.make}', '{self.model}', '{self.year}')"
     
 
-# Association table that caters for the many-to-many relationship
+# # Association table that caters for the many-to-many relationship
 
-user_vehicle = db.Table(
-    'user_vehicle',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-    db.Column('vehicle_id', db.Integer, db.ForeignKey('vehicles.id'), primary_key=True)
-)
+# user_vehicle = db.Table(
+#     'user_vehicle',
+#     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+#     db.Column('vehicle_id', db.Integer, db.ForeignKey('vehicles.id'), primary_key=True)
+#     extend_existing=True #allows us to redefine the table without raising an error
+# )
 
 #a dedicated model class for the association
 class UserVehicle(db.Model):
@@ -80,6 +81,20 @@ class Dealership(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f"Dealership('{self.name}', '{self.city}', '{self.state}')"
+    
+
+class VehicleDealership(db.Model):
+    __tablename__ = 'vehicle_dealership'
+
+    id = db.Column(db.Integer, primary_key=True)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'), nullable=False)
+    dealership_id = db.Column(db.Integer, db.ForeignKey('dealerships.id'), nullable=False)
+
+    # Additional fields if needed...
+
+    def __repr__(self):
+        return f"VehicleDealership('{self.vehicle_id}', '{self.dealership_id}')"
+
     
 class Review (db.Model):
     __tablename__ = 'reviews'
