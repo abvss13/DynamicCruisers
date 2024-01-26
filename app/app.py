@@ -196,6 +196,16 @@ class VehiclesResource(Resource):
 
             response = make_response(jsonify(vehicle_dict), 201)  # 201 Created
             return response
+    
+    #delete for the vehicles
+    def delete(self, id):
+        vehicle = Vehicle.query.get(id)
+        if vehicle:
+            db.session.delete(vehicle)
+            db.session.commit()
+            return make_response(jsonify({"message": f"Vehicle with id {id} deleted"}), 200)
+        else:
+            return make_response(jsonify({"error": f"Vehicle with id {id} not found"}), 404)
         
        
       
