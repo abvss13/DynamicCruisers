@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError #for handling database errors
 from flask import jsonify, request, make_response
 from flask_restful import Api, Resource
+from werkzeug.security import generate_password_hash
 
 
 from models import db, User, Vehicle, Dealership, Review, Rating, Likes, UserVehicle, VehicleDealership
@@ -51,7 +52,7 @@ def index():
 #                          'rating': dealership.rating,
 #                          'vehicles': dealership.vehicles } for dealership in dealerships]
 #     response = make_response(jsonify(dealerships_dict), 200)
-    return response
+    # return response
 class UserResource(Resource):
     def get(self, user_id=None):
         if user_id is not None:
@@ -103,6 +104,60 @@ class UserResource(Resource):
             return response
         else:
             return jsonify({"error": f"User with id {user_id} not found"}), 404
+        
+
+    def post(self):
+            data = request.get_json()
+
+            # Check if required fields are present in the request data
+            required_fields = ['firstname', 'lastname', 'email']
+            missing_fields = [field for field in required_fields if field not in data]
+            if missing_fields:
+                error_message = f"Missing keys: {','.join(missing_fields)}"
+                return {"error": error_message}, 400
+
+            # Create a new user instance
+            hashed_password = generate_password_hash(data['password'], method='sha256')
+            new_user = User(
+                firstname=data['firstname'],
+                lastname=data['lastname'],
+                email=data['email'],
+                password=hashed_password
+                
+            )
+
+            # Add the new user to the database
+            db.session.add(new_user)
+            db.session.commit()
+
+            # Return the newly created user as a response
+            user_list= {
+                "id": new_user.id,
+                "first_name": new_user.firstname,
+                "last_name": new_user.lastname,
+                "email": new_user.email,
+                "vehicles_owned": new_user.vehicles_owned,
+                "reviews": self.serialize_reviews(new_user.reviews)
+            }
+
+            response = make_response(jsonify(user_list), 201)  # 201 Created
+            return response
+    
+    #delete a user
+    def delete(self, user_id):
+        # Get the user by ID
+        user = User.query.get(user_id)
+
+        # Check if the user exists
+        if user:
+            # Remove the user from the database
+            db.session.delete(user)
+            db.session.commit()
+
+            return jsonify({"message": f"User with ID {user_id} has been deleted"}), 200
+        else:
+            return jsonify({"error": f"User with ID {user_id} not found"}), 404
+
 
     
 api.add_resource(UserResource, '/users', endpoint='users')
@@ -316,4 +371,4 @@ api.add_resource(ReviewsResource, '/reviews', endpoint='reviews')
 api.add_resource(ReviewsResource, '/reviews/<int:review_id>', endpoint='review')
 
 if __name__ == '__main__':
-    app.run(port=5555)
+    app.run(port=5000)
