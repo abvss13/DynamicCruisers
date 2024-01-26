@@ -1,17 +1,16 @@
-import React from 'react';
+import React from 'react'
 import Image from 'next/image';
-import { PiWarehouseBold } from 'react-icons/pi';
+import { IoHomeOutline } from "react-icons/io5";
 import { IoCarSportOutline } from 'react-icons/io5';
 import { GoCodeReview } from "react-icons/go";
 import { IoMdLogIn } from "react-icons/io";
-import Background1 from '../Public/_background/Background1.jpg';
+import Background1 from './_background/Background2.jpg';
 import Link from 'next/link';
 
 
-
-function Body() {
+function Dealerships() {
     return (
-        <div className='body'>
+        <div className='dealerships'>
             <div className='body__image'>
                 <Image
                     src={Background1}
@@ -38,48 +37,50 @@ function Body() {
                         </select>
                     </div>
                 </div>
-                <Link href='/dealerships' className='nav__links__container'>
+                <Link href='/' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
-                        <PiWarehouseBold size={30} />
+                        <IoHomeOutline size={30} />
                     </div>
                     <div className='nav__links__container__text'>
-                        <h3>Dealerships</h3>
+                        <h3>Home</h3>
                     </div>
                 </Link>
-                <div className='nav__links__container'>
+                <Link href='/cars' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <IoCarSportOutline size={30} />
                     </div>
                     <div className='nav__links__container__text'>
                         <h3>Cars on Sale</h3>
                     </div>
-                </div>
-                <div className='nav__links__container'>
+                </Link>
+                <Link href='/reviews' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <GoCodeReview size={30} />
                     </div>
                     <div className='nav__links__container__text'>
                         <h3>Car Reviews</h3>
                     </div>
-                </div><div className='nav__links__container'>
+                </Link>
+                <Link href='/dashboard' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <IoMdLogIn size={30} />
                     </div>
                     <div className='nav__links__container__text'>
                         <h3>Login | Sign Up</h3>
                     </div>
-                </div>
+                </Link>
             </div>
 
             <div className='body__container'>
                 <div className='body__container__text'>
-                    <h1>Used and New cars for sale in Nairobi...</h1>
-                    <br />
-                    <h3>...Shop by brand...</h3>
+                    <h1>Available Dealerships</h1>
+                    <div className='body__container__dealerships'>
+                        
+                    </div>
                 </div>
             </div>
         </div >
     )
 }
 
-export default Body
+export default Dealerships

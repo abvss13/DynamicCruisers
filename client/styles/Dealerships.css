@@ -1,0 +1,115 @@
+.dealerships {
+    display: flex;
+    flex-direction: column;
+    font-family: cursive;
+    line-height: 1.5;
+    color: #ffffff;
+    text-align: center;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  
+    .body__image {
+      z-index: -1;
+    }
+  
+    .nav__links {
+      display: flex;
+      flex-direction: row;
+      font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+      justify-content: end;
+  
+      .search__bar .select__brands {
+          justify-content: end;
+          margin-right: 850px;
+          margin-top: 40px;
+      }
+  
+      a {
+        text-decoration: none;
+        color: #ffffff;
+      }
+    }
+  
+    .nav__links__container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      margin: 20px;
+      margin-left: 40px;
+  
+      &:hover {
+        color: darkgreen;
+        cursor: pointer;
+        border-radius: 10px;
+        box-shadow: darkgreen 0px 2px;
+      }
+  
+    }
+  
+    .nav__links__container__text {
+      margin-left: 10px;
+    }
+  
+    .body__container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  
+      .body__container__text {
+        h1 {
+          font-size: 40px;
+          margin-bottom: 10px;
+        }
+  
+        h3 {
+          font-size: 20px;
+          margin-bottom: 20px;
+          font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+            "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+        }
+        
+      }
+      .body__container__dealerships {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+  
+        .body__container__dealerships__card {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin: 20px;
+          width: 300px;
+          height: 300px;
+          border-radius: 10px;
+          background-color: #ffffff;
+          box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+          transition: 0.3s;
+  
+          &:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+          }
+  
+          .body__container__dealerships__card__image {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            margin-top: 20px;
+          }
+  
+          .body__container__dealerships__card__text {
+            margin-top: 20px;
+            font-size: 20px;
+          }
+        }
+      }
+    }
+  }
+  
