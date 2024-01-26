@@ -4,6 +4,7 @@ import { PiWarehouseBold } from 'react-icons/pi';
 import { IoCarSportOutline } from 'react-icons/io5';
 import { GoCodeReview } from "react-icons/go";
 import { IoMdLogIn } from "react-icons/io";
+import { IoHomeOutline } from "react-icons/io5";
 import Background1 from '../Public/_background/Background1.jpg';
 import Link from 'next/link';
 
@@ -38,12 +39,20 @@ function Body() {
                         </select>
                     </div>
                 </div>
+                <Link href='/' className='nav__links__container'>
+                    <div className='nav__links__container__icon'>
+                        <IoHomeOutline size={30} />
+                    </div>
+                    <div className='nav__links__container__text'>
+                        <h3>Home</h3>
+                    </div>
+                </Link>
                 <Link href='/dealerships' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <PiWarehouseBold size={30} />
                     </div>
                     <div className='nav__links__container__text'>
-                        <h3>Dealerships</h3>
+                        <h3>Dealers</h3>
                     </div>
                 </Link>
                 <Link href='/cars' className='nav__links__container'>
@@ -51,7 +60,7 @@ function Body() {
                         <IoCarSportOutline size={30} />
                     </div>
                     <div className='nav__links__container__text'>
-                        <h3>Cars on Sale</h3>
+                        <h3>Cars</h3>
                     </div>
                 </Link>
                 <Link href='/reviews' className='nav__links__container'>
@@ -59,7 +68,7 @@ function Body() {
                         <GoCodeReview size={30} />
                     </div>
                     <div className='nav__links__container__text'>
-                        <h3>Car Reviews</h3>
+                        <h3>Reviews</h3>
                     </div>
                 </Link>
                 <Link href='/dashboard' className='nav__links__container'>
@@ -67,7 +76,7 @@ function Body() {
                         <IoMdLogIn size={30} />
                     </div>
                     <div className='nav__links__container__text'>
-                        <h3>Login | Sign Up</h3>
+                        <h3>Login</h3>
                     </div>
                 </Link>
             </div>

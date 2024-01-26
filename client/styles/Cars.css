@@ -72,14 +72,14 @@
           padding: 10px;
         }
       }
-      .body__container__dealerships {
+      .body__container__cars {
         display: flex;
         flex-direction: row;
         justify-content: center;
         flex-wrap: wrap;
         margin-bottom: 20px;
   
-        .body__container__dealerships__card {
+        .body__container__cars__card {
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -98,9 +98,30 @@
             box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
           }
   
-          .body__container__dealerships__card__text {
-            margin-top: 20px;
-            font-size: 20px;
+          .body__container__cars__card__text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+            font-family: 'Times New Roman', Times, serif;
+
+            h2 {
+              font-size: 20px;
+              margin: 15px;
+              color: black;
+            }
+
+            h3 {
+              font-size: 15px;
+              margin: 10px;
+              color: black;
+            }
+
+            p {
+              font-size: 15px;
+              margin: 10px;
+              color: black;
+            }
           }
         }
       }

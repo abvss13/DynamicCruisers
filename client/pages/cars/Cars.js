@@ -4,6 +4,7 @@ import { IoHomeOutline } from "react-icons/io5";
 import { IoCarSportOutline } from 'react-icons/io5';
 import { GoCodeReview } from "react-icons/go";
 import { IoMdLogIn } from "react-icons/io";
+import { PiWarehouseBold } from 'react-icons/pi';
 import Background1 from './_background/Background1.jpg';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -59,12 +60,20 @@ function Dealerships() {
                         <h3>Home</h3>
                     </div>
                 </Link>
+                <Link href='/dealerships' className='nav__links__container'>
+                    <div className='nav__links__container__icon'>
+                        <PiWarehouseBold size={30} />
+                    </div>
+                    <div className='nav__links__container__text'>
+                        <h3>Dealers</h3>
+                    </div>
+                </Link>
                 <Link href='/cars' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <IoCarSportOutline size={30} />
                     </div>
                     <div className='nav__links__container__text'>
-                        <h3>Cars on Sale</h3>
+                        <h3>Cars</h3>
                     </div>
                 </Link>
                 <Link href='/reviews' className='nav__links__container'>
@@ -72,7 +81,7 @@ function Dealerships() {
                         <GoCodeReview size={30} />
                     </div>
                     <div className='nav__links__container__text'>
-                        <h3>Car Reviews</h3>
+                        <h3>Reviews</h3>
                     </div>
                 </Link>
                 <Link href='/dashboard' className='nav__links__container'>
@@ -80,7 +89,7 @@ function Dealerships() {
                         <IoMdLogIn size={30} />
                     </div>
                     <div className='nav__links__container__text'>
-                        <h3>Login | Sign Up</h3>
+                        <h3>Login</h3>
                     </div>
                 </Link>
             </div>
@@ -88,20 +97,15 @@ function Dealerships() {
             <div className='body__container'>
                 <div className='body__container__text'>
                     <h1>Available Cars</h1>
-                    <div className='body__container__dealerships'>
+                    <div className='body__container__cars'>
                         {vehicles.map(vehicle => (
-                            <div className='body__container__dealerships__card'>
-                                <div className='body__container__dealerships__card__image'>
-                                    <Image
-                                        src={vehicle.image}
-                                        alt="Vehicle Image"
-                                        quality={100}
-                                    />
+                            <div className='body__container__cars__card'>
+                                <div className='body__container__cars__card__image'>
                                 </div>
-                                <div className='body__container__dealerships__card__text'>
-                                    <h2>{vehicle.brand}</h2>
-                                    <h3>{vehicle.model}</h3>
-                                    <h3>{vehicle.price}</h3>
+                                <div className='body__container__cars__card__text'>
+                                    <h2>Make: {vehicle.make}</h2>
+                                    <h3>Model: {vehicle.model}</h3>
+                                    <p>Year: {vehicle.year}</p>
                                 </div>
                             </div>
                         ))}

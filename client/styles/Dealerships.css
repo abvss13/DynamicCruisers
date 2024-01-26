@@ -99,8 +99,28 @@
         }
 
         .body__container__dealerships__card__text {
-          margin-top: 20px;
-          font-size: 20px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin: 10px;
+          font-family: 'Times New Roman', Times, serif;
+
+          h2 {
+            font-size: 20px;
+            margin: 15px;
+            color: black;
+          }
+
+          h3 {
+            font-size: 15px;
+            margin: 10px;
+            color: black;
+          }
+
+          p {
+            font-size: 15px;
+            margin: 10px;
+            color: black;}
         }
       }
     }
