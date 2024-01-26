@@ -1,144 +1,140 @@
-<<<<<<< HEAD
-from app import db, User, Vehicle, Dealership, Review, Likes, Rating
 from faker import Faker
-from datetime import datetime
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from models import db, User, Vehicle, Dealership, Review, Rating, Likes, UserVehicle, VehicleDealership
+from sqlalchemy.exc import SQLAlchemyError
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
 
 fake = Faker()
 
-def generate_fake_user():
-    return User(
-        firstname=fake.first_name(),
-        lastname=fake.last_name(),
-        email=fake.email(),
-        password="password"  # Replace with a hashed password in a real application
-    )
+def seed_users():
+    for _ in range(10):
+        user = User(
+            firstname=fake.unique.first_name(),
+            lastname=fake.unique.last_name(),
+            email=fake.unique.email(),
+            password=fake.password()
+        )
+        db.session.add(user)
 
-def generate_fake_vehicle():
-    return Vehicle(
-        make=fake.word(),
-        model=fake.word(),
-        year=fake.year(),
-        availability=fake.boolean(),
-        numbers_available=fake.random_int(min=1, max=10),
-        likes=fake.random_int(min=0, max=100),
-        image=fake.image_url()
-    )
-
-def generate_fake_dealership():
-    return Dealership(
-        name=fake.company(),
-        address=fake.address(),
-        website=fake.url(),
-        rating=fake.random.uniform(1.0, 5.0)
-    )
-
-def generate_fake_review(user, vehicle):
-    return Review(
-        title=fake.sentence(),
-        content=fake.paragraph(),
-        date_posted=datetime.utcnow(),
-        user=user,
-        vehicle=vehicle
-    )
-
-def generate_fake_likes(user, vehicle):
-    return Likes(
-        user=user,
-        vehicle=vehicle
-    )
-
-def generate_fake_rating(user, dealership):
-    return Rating(
-        rating=fake.random_int(min=1, max=5),
-        user=user,
-        dealership=dealership
-    )
-
-def seed_database():
-    db.create_all()
-
-    # Create fake users
-    users = [generate_fake_user() for _ in range(10)]
-    db.session.add_all(users)
     db.session.commit()
 
-    # Create fake vehicles
-    vehicles = [generate_fake_vehicle() for _ in range(10)]
-    db.session.add_all(vehicles)
+def seed_vehicles():
+    for _ in range(10):
+        vehicle = Vehicle(
+            make=fake.company(),
+            model=fake.word(),
+            year=fake.year(),
+            availability=fake.boolean(),
+            numbers_available=fake.random_int(min=1, max=10),
+            likes=fake.random_int(min=0, max=100),
+            image=fake.file_name()
+        )
+        db.session.add(vehicle)
+
     db.session.commit()
 
-    # Create fake dealerships
-    dealerships = [generate_fake_dealership() for _ in range(5)]
-    db.session.add_all(dealerships)
+def seed_dealerships():
+    for _ in range(5):
+        dealership = Dealership(
+            name=fake.company(),
+            address=fake.address(),
+            website=fake.url(),
+            rating=fake.random_int(min=1, max=5)
+        )
+        db.session.add(dealership)
+
     db.session.commit()
 
-    # Create fake reviews, likes, and ratings
+def seed_reviews():
+    users = User.query.all()
+    vehicles = Vehicle.query.all()
+
+    for _ in range(15):
+        review = Review(
+            title=fake.sentence(),
+            content=fake.paragraph(),
+            date_posted=fake.date_time_this_decade(),
+            user=fake.random_element(elements=users),
+            vehicle=fake.random_element(elements=vehicles)
+        )
+        db.session.add(review)
+
+    db.session.commit()
+
+def seed_likes():
+    users = User.query.all()
+    reviews = Review.query.all()
+    vehicles = Vehicle.query.all()
+
+    for _ in range(20):
+        like = Likes(
+            user=fake.random_element(elements=users),
+            review=fake.random_element(elements=reviews),
+            vehicle=fake.random_element(elements=vehicles)
+        )
+        db.session.add(like)
+
+    db.session.commit()
+
+def seed_ratings():
+    users = User.query.all()
+    dealerships = Dealership.query.all()
+
+    for _ in range(5):
+        rating = Rating(
+            rating=fake.random_int(min=1, max=5),
+            user=fake.random_element(elements=users),
+            dealership=fake.random_element(elements=dealerships)
+        )
+        db.session.add(rating)
+
+    db.session.commit()
+
+def seed_user_vehicle():
+    users = User.query.all()
+    vehicles = Vehicle.query.all()
+
     for user in users:
-        vehicle = fake.random_element(vehicles)
-        dealership = fake.random_element(dealerships)
-
-        review = generate_fake_review(user, vehicle)
-        likes = generate_fake_likes(user, vehicle)
-        rating = generate_fake_rating(user, dealership)
-
-        db.session.add_all([review, likes, rating])
+        for _ in range(fake.random_int(min=1, max=5)):
+            user_vehicle = UserVehicle(
+                user=user,
+                vehicle=fake.random_element(elements=vehicles)
+            )
+            db.session.add(user_vehicle)
 
     db.session.commit()
 
-if __name__ == "__main__":
-    seed_database()
-=======
-from app import app, db
-from models import User, Vehicle, Dealership, Review, Likes, Rating, UserVehicle, VehicleDealership
-from datetime import datetime
+def seed_vehicle_dealership():
+    vehicles = Vehicle.query.all()
+    dealerships = Dealership.query.all()
 
-# Flask setup
-with app.app_context():
-    # Create tables
-    db.create_all()
+    for vehicle in vehicles:
+        for _ in range(fake.random_int(min=1, max=3)):
+            vehicle_dealership = VehicleDealership(
+                vehicle=vehicle,
+                dealership=fake.random_element(elements=dealerships)
+            )
+            db.session.add(vehicle_dealership)
 
-    # Add sample users
-    user1 = User(firstname='Rasmi', lastname='Noel', email='rasmi.Noel@gmail.com', password='password1')
-    user2 = User(firstname='Abdullahi', lastname='Abass', email='abdullahi.abass@gmail.com', password='password2')
-    user3 = User(firstname='Isaac', lastname='Mutiga', email='isaac.mutiga@gmail.com', password='password3')
-    user4 = User(firstname='Bryan', lastname='Kiplangat', email='bryan.kiplangat@example.com', password='password4')
-    db.session.add_all([user1, user2, user3, user4])
     db.session.commit()
 
-    # Add sample vehicles
-    vehicle1 = Vehicle(make='Toyota', model='Camry', year=2020)
-    vehicle2 = Vehicle(make='Honda', model='Civic', year=2019)
-
-    db.session.add_all([vehicle1, vehicle2])
-    db.session.commit()
-
-    # Add sample dealerships
-    dealership1 = Dealership(name='Dynamic Cruisers1', address='Mombasa', website='dynamic-cruisers.com', rating=4.5)
-    dealership2 = Dealership(name='Dynamic Cruisers2', address='Nairobi', website='dynamic-cruisers.com', rating=3.8)
-
-    db.session.add_all([dealership1, dealership2])
-    db.session.commit()
-
-    # Add sample reviews
-    review1 = Review(title='Great Car', content='I love my new Camry!', date_posted=datetime.utcnow(), user=user1, vehicle=vehicle1)
-    review2 = Review(title='Smooth Ride', content='The Civic is a smooth ride.', date_posted=datetime.utcnow(), user=user2, vehicle=vehicle2)
-
-    db.session.add_all([review1, review2])
-    db.session.commit()
-
-    # Add sample likes
-    like1 = Likes(user=user1, vehicle=vehicle1)
-    like2 = Likes(user=user2, vehicle=vehicle2)
-
-    db.session.add_all([like1, like2])
-    db.session.commit()
-
-    # Add sample ratings
-    rating1 = Rating(rating=4, user=user1, dealership=dealership1)
-    rating2 = Rating(rating=3, user=user2, dealership=dealership2)
-
-    db.session.add_all([rating1, rating2])
-    db.session.commit()
-
-    print('Database seeded successfully!')
->>>>>>> 4d11d9cae84240939581ac1f92db976ea318011b
+if __name__ == '__main__':
+    with app.app_context():
+        try:
+            seed_users()
+            seed_vehicles()
+            seed_dealerships()
+            seed_reviews()
+            seed_likes()
+            seed_ratings()
+            seed_user_vehicle()
+            seed_vehicle_dealership()
+            print("Database seeded successfully.")
+        except SQLAlchemyError as e:
+            print(f"Error seeding database: {str(e)}")
