@@ -28,30 +28,87 @@ def index():
     response = make_response(jsonify({'message': 'Welcome to the Car Dealership API'}), 200)
     return response
 
-@app.route('/users', methods=['GET'])
-def get_users():
-    users = User.query.all()
-    users_dict = [{'id': user.id,
-                   'firstname': user.firstname,
-                   'lastname': user.lastname,
-                   'email': user.email,
-                   'reviews': user.reviews,
-                   'vehicles_owned': user.vehicles_owned,
-                   'reviews': user.reviews } for user in users]
-    response = make_response(jsonify(users_dict), 200)
-    return response
+# @app.route('/users', methods=['GET'])
+# def get_users():
+#     users = User.query.all()
+#     users_dict = [{'id': user.id,
+#                    'firstname': user.firstname,
+#                    'lastname': user.lastname,
+#                    'email': user.email,
+#                    'reviews': user.reviews,
+#                    'vehicles_owned': user.vehicles_owned,
+#                    'reviews': user.reviews } for user in users]
+#     response = make_response(jsonify(users_dict), 200)
+#     return response
 
-@app.route('/dealerships', methods=['GET'])
-def get_dealerships():
-    dealerships = Dealership.query.all()
-    dealerships_dict = [{'id': dealership.id,
-                         'name': dealership.name,
-                         'address': dealership.address,
-                         'website': dealership.website,
-                         'rating': dealership.rating,
-                         'vehicles': dealership.vehicles } for dealership in dealerships]
-    response = make_response(jsonify(dealerships_dict), 200)
+# @app.route('/dealerships', methods=['GET'])
+# def get_dealerships():
+#     dealerships = Dealership.query.all()
+#     dealerships_dict = [{'id': dealership.id,
+#                          'name': dealership.name,
+#                          'address': dealership.address,
+#                          'website': dealership.website,
+#                          'rating': dealership.rating,
+#                          'vehicles': dealership.vehicles } for dealership in dealerships]
+#     response = make_response(jsonify(dealerships_dict), 200)
     return response
+class UserResource(Resource):
+    def get(self, user_id=None):
+        if user_id is not None:
+            return self.get_single_user(user_id)
+
+
+        users = User.query.all()
+        users_dict = [
+            {
+                "id": user.id,
+                "first_name": user.firstname,
+                "last_name": user.lastname,
+                "email": user.email,
+                "vehicles_owned": user.vehicles_owned,
+                "reviews": self.serialize_reviews(user.reviews)
+            }
+            for user in users
+        ]
+        response = make_response(
+            jsonify(users_dict),
+            200
+        )
+        return response
+    
+    def serialize_reviews(self, reviews):
+        return [
+            {
+                "id": review.id,
+                "content": review.content
+            }
+            for review in reviews
+        ]
+    
+    def get_single_user(self, user_id):
+        user = User.query.get(user_id)
+        if user:
+            user_dict = {
+                "id": user.id,
+                "first_name": user.firstname,
+                "last_name": user.lastname,
+                "email": user.email,
+                "vehicles_owned": user.vehicles_owned,
+                "reviews": self.serialize_reviews(user.reviews)
+            }
+            response = make_response(
+                 jsonify(user_dict),
+                 200
+            )
+            return response
+        else:
+            return jsonify({"error": f"User with id {user_id} not found"}), 404
+
+    
+api.add_resource(UserResource, '/users', endpoint='users')
+api.add_resource(UserResource, '/users/<int:user_id>', endpoint='user')
+
+
 # Dealerships Routes
 class DealershipsResource(Resource):
     def get(self):
