@@ -440,7 +440,7 @@ api.add_resource(DealershipVehiclesResource, '/dealership_vehicles/<int:dealersh
 
 # Reviews Routes
 class ReviewsResource(Resource):
-    def get(self):
+    def get(self, vehicle_id):
     # Get reviews by vehicle_id
         reviews = Review.query.filter_by(vehicle_id=vehicle_id).all()
         if reviews:
@@ -502,7 +502,7 @@ class ReviewsResource(Resource):
         return response
 
 api.add_resource(ReviewsResource, '/reviews', endpoint='reviews')
-api.add_resource(ReviewsResource, '/reviews/<int:review_id>', endpoint='review')
+api.add_resource(ReviewsResource, '/reviews/<int:vehicle_id>', endpoint='review')
 
 if __name__ == '__main__':
     app.run(port=5555)

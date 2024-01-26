@@ -19,8 +19,9 @@ python3 app.py
 There is some seeded data in the app.db
 
 ### Routes
+#### Dealerships
 
-Get dealership route:
+Get all dealership route:
 `/dealerships`
 Server output
 
@@ -54,18 +55,83 @@ Server output
 
 }
 ```
+#### Vehicles
+Get all vehicles route:
+`/vehicles`
+Server output:
 
-Get dealership route:
-`/dealerships`
-Server output
+```json
+[
+    {
+        "availability": false,
+        "id": 1,
+        "image": "other.ppt",
+        "likes": 65,
+        "make": "Burke and Sons",
+        "model": "pay",
+        "numbers_available": 10,
+        "year": 2019
+    },
+    {
+        // second vehicle
+        // ...
+    }
+]
+```
+
+Get vehicles by id route:
+`/vehicles/1`
+Server output:
 
 ```json
 {
+    "availability": false,
     "id": 1,
-    "name": "Nairobi cars",
-    "address": "12345 Main St",
-    "website": "www",
-    "rating": "3"
-
+    "image": "other.ppt",
+    "likes": 65,
+    "make": "Burke and Sons",
+    "model": "pay",
+    "numbers_available": 10,
+    "year": 2019
 }
+```
+
+### TO DO
+get vehicle's dealership when calling vehicles
+
+#### Reviews
+Get reviews for vehicle:
+`/reviews/<int: vehicle_id>`
+`/reviews/10`
+Server output:
+
+```json
+[
+    {
+        "content": "Face what almost turn true. Far surface career. Specific hope down assume challenge shake page. Level loss investment heavy.",
+        "date_posted": "2020-10-17T02:12:51.658804",
+        "id": 1,
+        "title": "Send of town certainly politics skin suggest.",
+        "user_firstname": "Glenda",
+        "user_id": 8,
+        "user_lastname": "Calderon",
+        "vehicle_id": 10,
+        "vehicle_make": "Martin PLC",
+        "vehicle_model": "drop",
+        "vehicle_year": 1975
+    },
+    {
+        "content": "Expert say course Republican door. Ground face you take she pay.",
+        "date_posted": "2020-07-16T09:51:54.879584",
+        "id": 6,
+        "title": "Republican as candidate thought become.",
+        "user_firstname": "Brittany",
+        "user_id": 10,
+        "user_lastname": "Hale",
+        "vehicle_id": 10,
+        "vehicle_make": "Martin PLC",
+        "vehicle_model": "drop",
+        "vehicle_year": 1975
+    },
+]
 ```
