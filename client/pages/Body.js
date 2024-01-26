@@ -46,29 +46,30 @@ function Body() {
                         <h3>Dealerships</h3>
                     </div>
                 </Link>
-                <div className='nav__links__container'>
+                <Link href='/cars' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <IoCarSportOutline size={30} />
                     </div>
                     <div className='nav__links__container__text'>
                         <h3>Cars on Sale</h3>
                     </div>
-                </div>
-                <div className='nav__links__container'>
+                </Link>
+                <Link href='/reviews' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <GoCodeReview size={30} />
                     </div>
                     <div className='nav__links__container__text'>
                         <h3>Car Reviews</h3>
                     </div>
-                </div><div className='nav__links__container'>
+                </Link>
+                <Link href='/dashboard' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <IoMdLogIn size={30} />
                     </div>
                     <div className='nav__links__container__text'>
                         <h3>Login | Sign Up</h3>
                     </div>
-                </div>
+                </Link>
             </div>
 
             <div className='body__container'>

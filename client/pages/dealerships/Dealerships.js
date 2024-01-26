@@ -6,9 +6,23 @@ import { GoCodeReview } from "react-icons/go";
 import { IoMdLogIn } from "react-icons/io";
 import Background1 from './_background/Background2.jpg';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 
 function Dealerships() {
+    const [dealerships, setDealerships] = useState([]);
+
+    useEffect(() => {
+        const fetchDealerships = async () => {
+            const res = await fetch('http://localhost:5555/dealerships');
+            const data = await res.json();
+            setDealerships(data);
+        }
+        fetchDealerships();
+    }, []);
+
+
+
     return (
         <div className='dealerships'>
             <div className='body__image'>
@@ -75,7 +89,15 @@ function Dealerships() {
                 <div className='body__container__text'>
                     <h1>Available Dealerships</h1>
                     <div className='body__container__dealerships'>
-                        
+                        {dealerships.map((dealership) => (
+                            <div className='body__container__dealerships__card'>
+                                <div className='body__container__dealerships__card__text'>
+                                    <h3>{dealership.name}</h3>
+                                    <p>{dealership.location}</p>
+                                    <p>{dealership.contact}</p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
