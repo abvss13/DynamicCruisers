@@ -10,21 +10,21 @@ import { useState, useEffect } from 'react';
 
 
 function Dealerships() {
-    const [dealerships, setDealerships] = useState([]);
+    const [vehicles, setVehicles] = useState([]);
 
     useEffect(() => {
-        const fetchDealerships = async () => {
-            const res = await fetch('http://localhost:5555/dealerships');
+        const fetchVehicles = async () => {
+            const res = await fetch('http://localhost:5555/vehicles');
             const data = await res.json();
-            setDealerships(data);
+            setVehicles(data);
         }
-        fetchDealerships();
+        fetchVehicles();
     }, []);
 
 
 
     return (
-        <div className='dealerships'>
+        <div className='cars'>
             <div className='body__image'>
                 <Image
                     src={Background1}
@@ -87,16 +87,21 @@ function Dealerships() {
 
             <div className='body__container'>
                 <div className='body__container__text'>
-                    <h1>Available Dealerships</h1>
+                    <h1>Available Cars</h1>
                     <div className='body__container__dealerships'>
-                        {dealerships.map((dealership) => (
+                        {vehicles.map(vehicle => (
                             <div className='body__container__dealerships__card'>
+                                <div className='body__container__dealerships__card__image'>
+                                    <Image
+                                        src={vehicle.image}
+                                        alt="Vehicle Image"
+                                        quality={100}
+                                    />
+                                </div>
                                 <div className='body__container__dealerships__card__text'>
-                                    <h2>{dealership.name}</h2>
-                                    <h3>{dealership.contact}</h3>
-                                    <p>{dealership.email}</p>
-                                    <p>{dealership.website}</p>
-                                    <p>{dealership.location}</p>
+                                    <h2>{vehicle.brand}</h2>
+                                    <h3>{vehicle.model}</h3>
+                                    <h3>{vehicle.price}</h3>
                                 </div>
                             </div>
                         ))}
