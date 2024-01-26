@@ -28,72 +28,72 @@ def index():
     response = make_response(jsonify({'message': 'Welcome to the Car Dealership API'}), 200)
     return response
 
-@app.route('/users', methods=['GET'])
-def get_users():
-    users = User.query.all()
-    users_dict = [{'id': user.id,
-                   'firstname': user.firstname,
-                   'lastname': user.lastname,
-                   'email': user.email,
-                   'reviews': user.reviews,
-                   'vehicles_owned': user.vehicles_owned,
-                   'reviews': user.reviews } for user in users]
-    response = make_response(jsonify(users_dict), 200)
-    return response
+# @app.route('/users', methods=['GET'])
+# def get_users():
+#     users = User.query.all()
+#     users_dict = [{'id': user.id,
+#                    'firstname': user.firstname,
+#                    'lastname': user.lastname,
+#                    'email': user.email,
+#                    'reviews': user.reviews,
+#                    'vehicles_owned': user.vehicles_owned,
+#                    'reviews': user.reviews } for user in users]
+#     response = make_response(jsonify(users_dict), 200)
+#     return response
 
-@app.route('/dealerships', methods=['GET'])
-def get_dealerships():
-    dealerships = Dealership.query.all()
-    dealerships_dict = [{'id': dealership.id,
-                         'name': dealership.name,
-                         'address': dealership.address,
-                         'website': dealership.website,
-                         'rating': dealership.rating,
-                         'vehicles': dealership.vehicles } for dealership in dealerships]
-    response = make_response(jsonify(dealerships_dict), 200)
-    return response
+# @app.route('/dealerships', methods=['GET'])
+# def get_dealerships():
+#     dealerships = Dealership.query.all()
+#     dealerships_dict = [{'id': dealership.id,
+#                          'name': dealership.name,
+#                          'address': dealership.address,
+#                          'website': dealership.website,
+#                          'rating': dealership.rating,
+#                          'vehicles': dealership.vehicles } for dealership in dealerships]
+#     response = make_response(jsonify(dealerships_dict), 200)
+#     return response
 # Dealerships Routes
-class DealershipsResource(Resource):
-    def get(self):
-        dealerships = Dealership.query.all()
-        dealerships_list = [
-            {
-                "id": dealership.id,
-                "name": dealership.name,
-                "address": dealership.address,
-                "website": dealership.website,
-                "rating": dealership.rating,
-                # Include other dealership attributes as needed
-            } for dealership in dealerships
-        ]
-        return jsonify(dealerships_list)
+# class DealershipsResource(Resource):
+#     def get(self):
+#         dealerships = Dealership.query.all()
+#         dealerships_list = [
+#             {
+#                 "id": dealership.id,
+#                 "name": dealership.name,
+#                 "address": dealership.address,
+#                 "website": dealership.website,
+#                 "rating": dealership.rating,
+#                 # Include other dealership attributes as needed
+#             } for dealership in dealerships
+#         ]
+#         return jsonify(dealerships_list)
 
-    def post(self):
-        data = request.get_json()
+#     def post(self):
+#         data = request.get_json()
 
-        dealership = Dealership(
-            name=data['name'],
-            address=data['address'],
-            website=data['website'],
-            rating=data['rating']
-        )
+#         dealership = Dealership(
+#             name=data['name'],
+#             address=data['address'],
+#             website=data['website'],
+#             rating=data['rating']
+#         )
 
-        db.session.add(dealership)
-        db.session.commit()
+#         db.session.add(dealership)
+#         db.session.commit()
 
-        dealership_dict = {
-            "id": dealership.id,
-            "name": dealership.name,
-            "address": dealership.address,
-            "website": dealership.website,
-            "rating": dealership.rating,
-        }
+#         dealership_dict = {
+#             "id": dealership.id,
+#             "name": dealership.name,
+#             "address": dealership.address,
+#             "website": dealership.website,
+#             "rating": dealership.rating,
+#         }
 
-        response = make_response(jsonify(dealership_dict), 201)  # 201 Created
-        return response
+#         response = make_response(jsonify(dealership_dict), 201)  # 201 Created
+#         return response
 
-api.add_resource(DealershipsResource, '/dealerships', endpoint='dealerships')
-api.add_resource(DealershipsResource, '/dealerships/<int:dealership_id>', endpoint='dealership')
+# api.add_resource(DealershipsResource, '/dealerships', endpoint='dealerships')
+# api.add_resource(DealershipsResource, '/dealerships/<int:dealership_id>', endpoint='dealership')
 
 # Vehicles Routes
 class VehiclesResource(Resource):
@@ -160,55 +160,328 @@ class VehiclesResource(Resource):
             return response 
 
     def post(self):
-        data = request.get_json()
+        try:
+            data = request.get_json()
 
-        vehicle = Vehicle(
-            make=data['make'],
-            model=data['model'],
-            year=data['year'],
-            availability=data['availability'],
-            numbers_available=data['numbers_available'],
-            likes=data['likes'],
-            image=data['image']
-        )
+            # Check if request contains valid JSON data
+            if not data:
+                print(data)
+                raise ValueError("Invalid JSON data in the request.")
 
-        db.session.add(vehicle)
-        db.session.commit()
+            # Create a new vehicle
+            new_vehicle = Vehicle(
+                make=data.get('make'),
+                model=data.get('model'),
+                year=data.get('year'),
+                availability=data.get('availability', True),
+                numbers_available=data.get('numbers_available', 1),
+                likes=data.get('likes', 0),
+                image=data.get('image', 'default.jpg'),
+                # Include other vehicle attributes as needed
+            )
 
-        vehicle_dict = {
-            "id": vehicle.id,
-            "make": vehicle.make,
-            "model": vehicle.model,
-            "year": vehicle.year,
-            "availability": vehicle.availability,
-            "numbers_available": vehicle.numbers_available,
-            "likes": vehicle.likes,
-            "image": vehicle.image,
-        }
+            # Add the new vehicle to the database
+            db.session.add(new_vehicle)
+            db.session.commit()
 
-        response = make_response(jsonify(vehicle_dict), 201)  # 201 Created
+            # Return the details of the newly added vehicle
+            response_data = {
+                "id": new_vehicle.id,
+                "make": new_vehicle.make,
+                "model": new_vehicle.model,
+                "year": new_vehicle.year,
+                "availability": new_vehicle.availability,
+                "numbers_available": new_vehicle.numbers_available,
+                "likes": new_vehicle.likes,
+                "image": new_vehicle.image,
+                # Include other vehicle attributes as needed
+            }
+
+            response = make_response(
+                jsonify(response_data),
+                201  # 201 Created
+            )
+
+        except Exception as e:
+            print(f"Caught an exception: {e}")
+            response = make_response(
+                jsonify({"error": f"{e}"}),
+                500  # 500 Internal Server Error
+            )
+
         return response
 
 api.add_resource(VehiclesResource, '/vehicles', endpoint='vehicles')
 api.add_resource(VehiclesResource, '/vehicles/<int:id>', endpoint='vehicle')
 
+
+class DealershipsResource(Resource):
+    def get(self, id=None):
+        if id is None:
+            # Get all dealerships
+            dealerships = Dealership.query.all()
+            if dealerships:
+                try:
+                    dealerships_list = [
+                        {
+                            "id": dealership.id,
+                            "name": dealership.name,
+                            "address": dealership.address,
+                            "website": dealership.website,
+                            "rating": dealership.rating,
+                            # Include other dealership attributes as needed
+                        } for dealership in dealerships
+                    ]
+                    response = make_response(
+                        jsonify(dealerships_list),
+                        200
+                    )
+                except Exception as e:
+                    print(f"Caught an exception: {e}")
+                    response = make_response(
+                        jsonify({"error": f"{e}"}),
+                        404
+                    )
+            else:
+                response = make_response(
+                    jsonify({"error": "Dealerships not found"}),
+                    404
+                )
+
+            return response
+        else:
+            # Get dealership by id
+            dealership = Dealership.query.filter_by(id=id).first()
+            if dealership:
+                dealership_dict = {
+                    "id": dealership.id,
+                    "name": dealership.name,
+                    "address": dealership.address,
+                    "website": dealership.website,
+                    "rating": dealership.rating,
+                    # Include other dealership attributes as needed
+                }
+                response = make_response(
+                    jsonify(dealership_dict),
+                    200
+                )
+            else:
+                response = make_response(
+                    jsonify({"error": f"Dealership id {id} not found"}),
+                    404
+                )
+            return response
+# Todo
+# add rating information when getting dealerships
+api.add_resource(DealershipsResource, '/dealerships', endpoint='dealerships')
+api.add_resource(DealershipsResource, '/dealerships/<int:id>', endpoint='dealership')
+
+
+# Dealership ratings Routes
+class RatingsResource(Resource):
+    def get(self, id=None):
+        if id is None:
+            # Get all ratings
+            ratings = Rating.query.all()
+            if ratings:
+                try:
+                    ratings_list = [
+                        {
+                            "id": rating.id,
+                            "rating": rating.rating,
+                            "user_id": rating.user_id,
+                            "user_firstname": rating.user.firstname,  # Include user details as needed
+                            "user_lastname": rating.user.lastname,
+                            "dealership_id": rating.dealership_id,
+                            "dealership_name": rating.dealership.name,  # Include dealership details as needed
+                        } for rating in ratings
+                    ]
+                    response = make_response(
+                        jsonify(ratings_list),
+                        200
+                    )
+                except Exception as e:
+                    print(f"Caught an exception: {e}")
+                    response = make_response(
+                        jsonify({"error": f"{e}"}),
+                        404
+                    )
+            else:
+                response = make_response(
+                    jsonify({"error": "Ratings not found"}),
+                    404
+                )
+
+            return response
+        else:
+            # Get rating by id
+            rating = Rating.query.filter_by(id=id).first()
+            if rating:
+                rating_dict = {
+                    "id": rating.id,
+                    "rating": rating.rating,
+                    "user_id": rating.user_id,
+                    "user_firstname": rating.user.firstname,  # Include user details as needed
+                    "user_lastname": rating.user.lastname,
+                    "dealership_id": rating.dealership_id,
+                    "dealership_name": rating.dealership.name,  # Include dealership details as needed
+                }
+                response = make_response(
+                    jsonify(rating_dict),
+                    200
+                )
+            else:
+                response = make_response(
+                    jsonify({"error": f"Rating id {id} not found"}),
+                    404
+                )
+            return response
+
+api.add_resource(RatingsResource, '/ratings', endpoint='ratings')
+api.add_resource(RatingsResource, '/ratings/<int:id>', endpoint='rating')
+
+# UserVehicles Routes
+class UserVehiclesResource(Resource):
+    def get(self, user_id=None):
+        if user_id is None:
+            # Get all user vehicles
+            user_vehicles = UserVehicle.query.all()
+            if user_vehicles:
+                try:
+                    user_vehicles_list = [
+                        {
+                            "user_id": user_vehicle.user_id,
+                            "vehicle_id": user_vehicle.vehicle_id,
+                            "vehicle_make": user_vehicle.vehicle.make,  # Include vehicle details as needed
+                            "vehicle_model": user_vehicle.vehicle.model,
+                            "vehicle_year": user_vehicle.vehicle.year,
+                        } for user_vehicle in user_vehicles
+                    ]
+                    response = make_response(
+                        jsonify(user_vehicles_list),
+                        200
+                    )
+                except Exception as e:
+                    print(f"Caught an exception: {e}")
+                    response = make_response(
+                        jsonify({"error": f"{e}"}),
+                        404
+                    )
+            else:
+                response = make_response(
+                    jsonify({"error": "User vehicles not found"}),
+                    404
+                )
+
+            return response
+        else:
+            # Get user vehicles by user_id
+            user_vehicles = UserVehicle.query.filter_by(user_id=user_id).all()
+            if user_vehicles:
+                try:
+                    user_vehicles_list = [
+                        {
+                            "user_id": user_vehicle.user_id,
+                            "vehicle_id": user_vehicle.vehicle_id,
+                            "vehicle_make": user_vehicle.vehicle.make,  # Include vehicle details as needed
+                            "vehicle_model": user_vehicle.vehicle.model,
+                            "vehicle_year": user_vehicle.vehicle.year,
+                        } for user_vehicle in user_vehicles
+                    ]
+                    response = make_response(
+                        jsonify(user_vehicles_list),
+                        200
+                    )
+                except Exception as e:
+                    print(f"Caught an exception: {e}")
+                    response = make_response(
+                        jsonify({"error": f"{e}"}),
+                        404
+                    )
+            else:
+                response = make_response(
+                    jsonify({"error": f"User id {user_id} not found or has no associated vehicles"}),
+                    404
+                )
+            return response
+
+api.add_resource(UserVehiclesResource, '/user_vehicles', endpoint='user_vehicles')
+api.add_resource(UserVehiclesResource, '/user_vehicles/<int:user_id>', endpoint='user_vehicle')
+
+class DealershipVehiclesResource(Resource):
+    def get(self):
+        # Get vehicles belonging to a dealership by dealership_id
+        dealership_vehicles = VehicleDealership.query.filter_by(dealership_id=dealership_id).all()
+        if dealership_vehicles:
+            try:
+                dealership_vehicles_list = [
+                    {
+                        "dealership_id": dealership_vehicle.dealership_id,
+                        "vehicle_id": dealership_vehicle.vehicle_id,
+                        "vehicle_make": dealership_vehicle.vehicle.make,  # Include vehicle details as needed
+                        "vehicle_model": dealership_vehicle.vehicle.model,
+                        "vehicle_year": dealership_vehicle.vehicle.year,
+                    } for dealership_vehicle in dealership_vehicles
+                ]
+                response = make_response(
+                    jsonify(dealership_vehicles_list),
+                    200
+                )
+            except Exception as e:
+                print(f"Caught an exception: {e}")
+                response = make_response(
+                    jsonify({"error": f"{e}"}),
+                    404
+                )
+        else:
+            response = make_response(
+                jsonify({"error": f"Dealership id {dealership_id} not found or has no associated vehicles"}),
+                404
+            )
+        return response
+
+api.add_resource(DealershipVehiclesResource, '/dealership_vehicles/<int:dealership_id>', endpoint='dealership_vehicle')
+
+
+
 # Reviews Routes
 class ReviewsResource(Resource):
     def get(self):
-        reviews = Review.query.all()
-        reviews_list = [
-            {
-                "id": review.id,
-                "title": review.title,
-                "content": review.content,
-                "date_posted": review.date_posted.isoformat(),
-                "user_id": review.user_id,
-                "vehicle_id": review.vehicle_id,
-                # Include other review attributes as needed
-            } for review in reviews
-        ]
-        return jsonify(reviews_list)
-
+    # Get reviews by vehicle_id
+        reviews = Review.query.filter_by(vehicle_id=vehicle_id).all()
+        if reviews:
+            try:
+                reviews_list = [
+                    {
+                        "id": review.id,
+                        "title": review.title,
+                        "content": review.content,
+                        "date_posted": review.date_posted.isoformat(),
+                        "user_id": review.user_id,
+                        "user_firstname": review.user.firstname,  # Include user details as needed
+                        "user_lastname": review.user.lastname,
+                        "vehicle_id": review.vehicle_id,
+                        "vehicle_make": review.vehicle.make,  # Include vehicle details as needed
+                        "vehicle_model": review.vehicle.model,
+                        "vehicle_year": review.vehicle.year,
+                    } for review in reviews
+                ]
+                response = make_response(
+                    jsonify(reviews_list),
+                    200
+                )
+            except Exception as e:
+                print(f"Caught an exception: {e}")
+                response = make_response(
+                    jsonify({"error": f"{e}"}),
+                    404
+                )
+        else:
+            response = make_response(
+                jsonify({"error": f"No reviews found for vehicle id {vehicle_id}"}),
+                404
+            )
+        return response
     def post(self):
         data = request.get_json()
 
