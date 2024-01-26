@@ -163,53 +163,47 @@ class VehiclesResource(Resource):
         try:
             data = request.get_json()
 
-            # Check if request contains valid JSON data
-            if not data:
-                print(data)
-                raise ValueError("Invalid JSON data in the request.")
-
-            # Create a new vehicle
-            new_vehicle = Vehicle(
-                make=data.get('make'),
-                model=data.get('model'),
-                year=data.get('year'),
-                availability=data.get('availability', True),
+            required_fields = ['make', 'model', 'year']
+            missing_fields = [field for field in required_fields if field not in data]
+            if missing_fields:
+                error_message = f"Missing keys: {','.join(missing_fields)}"
+                return jsonify({"error": error_message}), 400
+               
+            vehicle = Vehicle(
+                make=data['make'],
+                model=data['model'],
+                year=data['year'],
+                availability=bool(data.get('availability', False)),
                 numbers_available=data.get('numbers_available', 1),
                 likes=data.get('likes', 0),
-                image=data.get('image', 'default.jpg'),
-                # Include other vehicle attributes as needed
+                image=data.get('image')
             )
 
-            # Add the new vehicle to the database
-            db.session.add(new_vehicle)
+            db.session.add(vehicle)
             db.session.commit()
 
-            # Return the details of the newly added vehicle
-            response_data = {
-                "id": new_vehicle.id,
-                "make": new_vehicle.make,
-                "model": new_vehicle.model,
-                "year": new_vehicle.year,
-                "availability": new_vehicle.availability,
-                "numbers_available": new_vehicle.numbers_available,
-                "likes": new_vehicle.likes,
-                "image": new_vehicle.image,
-                # Include other vehicle attributes as needed
+            updated_vehicle = Vehicle.query.get(vehicle.id)
+            vehicle_dict = {
+               "id": updated_vehicle.id,
+               "make": updated_vehicle.make,
+               "model": updated_vehicle.model,
+               "year": updated_vehicle.year,
+               "availability": updated_vehicle.availability,
+               "numbers_available": updated_vehicle.numbers_available,
+               "likes": updated_vehicle.likes,
+               "image": updated_vehicle.image,
             }
 
-            response = make_response(
-                jsonify(response_data),
-                201  # 201 Created
-            )
-
+            response = make_response(jsonify(vehicle_dict), 201)  # 201 Created
+            return response
         except Exception as e:
             print(f"Caught an exception: {e}")
             response = make_response(
                 jsonify({"error": f"{e}"}),
                 500  # 500 Internal Server Error
             )
-
-        return response
+       
+      
 
 api.add_resource(VehiclesResource, '/vehicles', endpoint='vehicles')
 api.add_resource(VehiclesResource, '/vehicles/<int:id>', endpoint='vehicle')
