@@ -384,6 +384,45 @@ class DealershipsResource(Resource):
                     404
                 )
             return response
+        
+    #add a post for the dealerships
+    def post(self):
+        data = request.get_json()
+
+        required_fields = ['name', 'address', 'website', 'rating']  
+        missing_fields = [field for field in required_fields if field not in data]
+        
+        if missing_fields:
+            error_message = f"Missing keys: {','.join(missing_fields)}"
+            return {"error": error_message}, 400
+
+        
+        dealership = Dealership(
+            name=data['name'],
+            address=data['address'],
+            website=data['website'],
+            rating=data['rating'],
+            # Include other dealership attributes as needed
+        )
+
+        db.session.add(dealership)
+        db.session.commit()
+
+        updated_dealership = Dealership.query.get(dealership.id)
+        dealership_dict = {
+            "id": updated_dealership.id,
+            "name": updated_dealership.name,
+            "address": updated_dealership.address,
+            "website": updated_dealership.website,
+            "rating": updated_dealership.rating,
+            # Include other dealership attributes as needed
+        }
+
+        response = make_response(jsonify(dealership_dict), 201)  # 201 Created
+        return response
+
+            
+    
 # Todo
 # add rating information when getting dealerships
 api.add_resource(DealershipsResource, '/dealerships', endpoint='dealerships')
