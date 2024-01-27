@@ -420,6 +420,21 @@ class DealershipsResource(Resource):
 
         response = make_response(jsonify(dealership_dict), 201)  # 201 Created
         return response
+    
+    #deletion of dealerships
+    def delete(self, id):
+        dealership = Dealership.query.get(id)
+
+        if dealership:
+            try:
+                db.session.delete(dealership)
+                db.session.commit()
+                return {"message": f"Dealership id {id} deleted successfully"}, 200
+            except Exception as e:
+                db.session.rollback()
+                return {"error": f"Failed to delete dealership: {e}"}, 500
+        else:
+            return {"error": f"Dealership id {id} not found"}, 404
 
             
     
