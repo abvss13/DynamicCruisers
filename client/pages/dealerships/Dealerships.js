@@ -11,9 +11,14 @@ import { FiEdit3 } from "react-icons/fi";
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
-
 function Dealerships() {
     const [dealerships, setDealerships] = useState([]);
+    const [dealership, setDealership] = useState(null); // [1]
+    const [selectedDealership, setSelectedDealership] = useState(null);
+
+    const handleDealershipClick = (dealership) => {
+        setSelectedDealership(dealership);
+    };
 
     useEffect(() => {
         const fetchDealerships = async () => {
@@ -39,6 +44,21 @@ function Dealerships() {
         }
     };
 
+    const editDealership = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:5555/dealerships/${id}`, {
+                method: 'PUT',
+            });
+            if (!response.ok) {
+                throw new Error('Something went wrong!');
+            }
+            // Refresh the list of dealerships after a successful edit
+            setDealerships(dealerships.filter(dealership => dealership.id !== id));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 
     return (
         <div className='dealerships'>
@@ -52,22 +72,6 @@ function Dealerships() {
                 />
             </div>
             <div className='nav__links'>
-                <div className='search__bar'>
-                    <div className='select__brands'>
-                        <select name="cars" id="cars">
-                            <option value="select">Select Brand</option>
-                            <option value="cadillac">Cadillac</option>
-                            <option value="toyota">Toyota</option>
-                            <option value="mercedes">Mercedes</option>
-                            <option value="porshe">Porshe</option>
-                            <option value="chevrolet">Chevrolet</option>
-                            <option value="nissan">Nissan</option>
-                            <option value="jeep">Jeep</option>
-                            <option value="rolls-royce">Rolls-Royce</option>
-                            <option value="bmw">BMW</option>
-                        </select>
-                    </div>
-                </div>
                 <Link href='/' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <IoHomeOutline size={30} />
@@ -81,7 +85,7 @@ function Dealerships() {
                         <PiWarehouseBold size={30} />
                     </div>
                     <div className='nav__links__container__text'>
-                        <h3>Dealerships</h3>
+                        <h3>Dealers</h3>
                     </div>
                 </Link>
                 <Link href='/cars' className='nav__links__container'>
@@ -115,23 +119,29 @@ function Dealerships() {
                     <h1>Available Dealerships</h1>
                     <div className='body__container__dealerships'>
                         {dealerships.map((dealership) => (
-                            <div className='body__container__dealerships__card'>
+                            <div className='body__container__dealerships__card' onClick={() => handleDealershipClick(dealership)}>
                                 <div className='body__container__dealerships__card__text'>
                                     <h2>{dealership.name}</h2>
-                                    <h3>Address: {dealership.address}</h3>
-                                    <p>Website: {dealership.website}</p>
-                                    <p>Rating: {dealership.rating}</p>
-                                    <div className='buttons'>
-                                        <button onClick={() => deleteDealership(dealership.id)}><MdDeleteOutline size={20} /></button>
-                                        <button><FiEdit3 size={20} /></button>
-                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                </div>
+                </div >
+                {selectedDealership && (
+                    <div className='selected__dealership'>
+                        <h2>{selectedDealership.name}</h2>
+                        <h3>Address: {selectedDealership.address}</h3>
+                        <p>Website: {selectedDealership.website}</p>
+                        <p>Rating: {selectedDealership.rating}</p>
+                        <div className='buttons'>
+                            <button onClick={() => deleteDealership(dealership.id)}><MdDeleteOutline size={20} /></button>
+                            <button onClick={() => editDealership(dealership.id)}><FiEdit3 size={20} /></button>
+                        </div>
+                    </div>
+                )}
             </div>
-        </div >
+        </div>
+
     )
 }
 

@@ -8,6 +8,7 @@
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 
   .body__image {
     z-index: -1;
@@ -52,9 +53,8 @@
   }
 
   .body__container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
 
     .body__container__text {
       h1 {
@@ -63,7 +63,7 @@
       }
 
       h1 {
-        font-size: 40px;
+        font-size: 20px;
         margin-bottom: 20px;
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.75);
@@ -74,27 +74,25 @@
     }
     .body__container__dealerships {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin: 20px;
 
       .body__container__dealerships__card {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin: 20px;
-        width: 300px;
-        height: 300px;
         border-radius: 10px;
         background-color: #ffffff;
         box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
         transition: 0.3s;
+        margin: 10px;
 
         &:hover {
           transform: scale(1.1);
           box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+          cursor: pointer;
         }
 
         .body__container__dealerships__card__text {
@@ -104,46 +102,47 @@
           margin: 10px;
           font-family: "Times New Roman", Times, serif;
 
-          .buttons {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            margin: 10px;
-
-            button {
-              margin: 10px;
-              margin-left: 20px;
-              margin-right: 20px;
-              border-radius: 10px;
-              background-color: #ffffff;
-              box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 1.75);
-              transition: 0.3s;
-
-              &:hover {
-                transform: scale(1.4);
-                cursor: pointer;
-                box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-              }
-            }
-          }
-
           h2 {
             font-size: 20px;
             margin: 15px;
             color: black;
           }
+        }
+      }
+    }
+    .selected__dealership {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background-color: #ffffff;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+      transition: 0.3s;
+      margin: 10px;
+      color: black;
 
-          h3 {
-            font-size: 15px;
-            margin: 10px;
-            color: black;
-          }
+      .buttons {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin: 10px;
 
-          p {
-            font-size: 15px;
-            margin: 10px;
-            color: black;
+        button {
+          margin: 10px;
+          margin-left: 20px;
+          margin-right: 20px;
+          border-radius: 10px;
+          background-color: #000000;
+          box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 1.75);
+          transition: 0.3s;
+          color: #ffffff;
+
+          &:hover {
+            transform: scale(1.4);
+            cursor: pointer;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
           }
         }
       }
