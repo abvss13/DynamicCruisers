@@ -613,7 +613,84 @@ api.add_resource(DealershipVehiclesResource, '/dealership_vehicles/<int:dealersh
 
 # Reviews Routes
 class ReviewsResource(Resource):
-    def get(self, vehicle_id):
+    def get(self, vehicle_id=None):
+        if vehicle_id is not None:
+            # Get reviews by vehicle_id
+            reviews = Review.query.filter_by(vehicle_id=vehicle_id).all()
+            if reviews:
+                try:
+                    reviews_list = [
+                        {
+                            "id": review.id,
+                            "title": review.title,
+                            "content": review.content,
+                            "date_posted": review.date_posted.isoformat(),
+                            "user_id": review.user_id,
+                            "user_firstname": review.user.firstname,
+                            "user_lastname": review.user.lastname,
+                            "vehicle_id": review.vehicle_id,
+                            "vehicle_make": review.vehicle.make,
+                            "vehicle_model": review.vehicle.model,
+                            "vehicle_year": review.vehicle.year,
+                        } for review in reviews
+                    ]
+                    response = make_response(
+                        jsonify(reviews_list),
+                        200
+                    )
+                except Exception as e:
+                    print(f"Caught an exception: {e}")
+                    response = make_response(
+                        jsonify({"error": f"{e}"}),
+                        404
+                    )
+            else:
+                response = make_response(
+                    jsonify({"error": f"No reviews found for vehicle id {vehicle_id}"}),
+                    404
+                )
+        else:
+            # Get all reviews
+            reviews = Review.query.all()
+            if reviews:
+                try:
+                    reviews_list = [
+                        {
+                            "id": review.id,
+                            "title": review.title,
+                            "content": review.content,
+                            "date_posted": review.date_posted.isoformat(),
+                            "user_id": review.user_id,
+                            "user_firstname": review.user.firstname,
+                            "user_lastname": review.user.lastname,
+                            "vehicle_id": review.vehicle_id,
+                            "vehicle_make": review.vehicle.make,
+                            "vehicle_model": review.vehicle.model,
+                            "vehicle_year": review.vehicle.year,
+                        } for review in reviews
+                    ]
+                    response = make_response(
+                        jsonify(reviews_list),
+                        200
+                    )
+                except Exception as e:
+                    print(f"Caught an exception: {e}")
+                    response = make_response(
+                        jsonify({"error": f"{e}"}),
+                        404
+                    )
+            else:
+                response = make_response(
+                    jsonify({"error": "No reviews found"}),
+                    404
+                )
+
+        return response
+
+
+
+    #get review by id
+    def get_review(self, vehicle_id):
     # Get reviews by vehicle_id
         reviews = Review.query.filter_by(vehicle_id=vehicle_id).all()
         if reviews:
@@ -652,6 +729,13 @@ class ReviewsResource(Resource):
     def post(self):
         data = request.get_json()
 
+        #check if the required fields are present in the requested data
+        required_fields = ['title', 'content', 'user_id', 'vehicle_id']
+        missing_fields = [field for field in required_fields if field not in data]
+        if missing_fields:
+            error_message = f"Missing keys: {','.join(missing_fields)}"
+            return {"error": error_message}, 400
+        
         review = Review(
             title=data['title'],
             content=data['content'],
@@ -673,6 +757,21 @@ class ReviewsResource(Resource):
 
         response = make_response(jsonify(review_dict), 201)  # 201 Created
         return response
+    
+    #create a delete for reviews
+    def delete(self, vehicle_id):
+        review = Review.query.get(vehicle_id)
+
+        if review:
+            try:
+                db.session.delete(review)
+                db.session.commit()
+                return {"message": f"Review id {vehicle_id} deleted successfully"}, 200
+            except Exception as e:
+                db.session.rollback()
+                return {"error": f"Failed to delete review: {e}"}, 500
+        else:
+            return {"error": f"Review id {vehicle_id} not found"}, 404
 
 api.add_resource(ReviewsResource, '/reviews', endpoint='reviews')
 api.add_resource(ReviewsResource, '/reviews/<int:vehicle_id>', endpoint='review')
