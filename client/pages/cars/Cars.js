@@ -5,13 +5,21 @@ import { IoCarSportOutline } from 'react-icons/io5';
 import { GoCodeReview } from "react-icons/go";
 import { IoMdLogIn } from "react-icons/io";
 import { PiWarehouseBold } from 'react-icons/pi';
+import { MdDeleteOutline } from "react-icons/md";
+import { FiEdit3 } from "react-icons/fi";
 import Background1 from './_background/Background1.jpg';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 
-function Dealerships() {
+function Vehicles() {
     const [vehicles, setVehicles] = useState([]);
+    const [vehicle, setVehicle] = useState(null); // [1]
+    const [selectedVehicle, setSelectedVehicle] = useState(null);
+
+    const handleCarClick = (vehicle) => {
+        setSelectedVehicle(vehicle);
+    }
 
     useEffect(() => {
         const fetchVehicles = async () => {
@@ -21,6 +29,36 @@ function Dealerships() {
         }
         fetchVehicles();
     }, []);
+
+    const deleteVehicle = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:5555/vehicles/${id}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) {
+                throw new Error('Something went wrong!');
+            }
+            // Refresh the list of vehicles after a successful delete
+            setVehicles(vehicles.filter(vehicle => vehicle.id !== id));
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const editVehicle = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:5555/vehicles/${id}`, {
+                method: 'PUT',
+            });
+            if (!response.ok) {
+                throw new Error('Something went wrong!');
+            }
+            // Refresh the list of vehicles after a successful edit
+            setVehicles(vehicles.filter(vehicle => vehicle.id !== id));
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
 
 
@@ -95,25 +133,40 @@ function Dealerships() {
             </div>
 
             <div className='body__container'>
-                <div className='body__container__text'>
+                <div className='body__container__list'>
                     <h1>Available Cars</h1>
                     <div className='body__container__cars'>
                         {vehicles.map(vehicle => (
-                            <div className='body__container__cars__card'>
+                            <div className='body__container__cars__card' onClick={() => handleCarClick(vehicle)}>
                                 <div className='body__container__cars__card__image'>
                                 </div>
                                 <div className='body__container__cars__card__text'>
-                                    <h2>Make: {vehicle.make}</h2>
-                                    <h3>Model: {vehicle.model}</h3>
-                                    <p>Year: {vehicle.year}</p>
+                                    <h2>{vehicle.make}</h2>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
+                {selectedVehicle && (
+                    <div className='selected__car'>
+                        <div className='selected__car__image'>
+                            
+                        </div>
+                        <div className='selected__car__text'>
+                            <h1>{selectedVehicle.make}</h1>
+                            <h2>{selectedVehicle.model}</h2>
+                            <h3>{selectedVehicle.year}</h3>
+                            <h4>{selectedVehicle.price}</h4>
+                            <div className='buttons'>
+                                <button onClick={() => deleteVehicle(vehicle.id)}><MdDeleteOutline size={20} /></button>
+                                <button onClick={() => editVehicle(vehicle.id)}><FiEdit3 size={20} /></button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div >
     )
 }
 
-export default Dealerships
+export default Vehicles
