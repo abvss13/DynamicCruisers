@@ -117,6 +117,12 @@ function Dealerships() {
             <div className='body__container'>
                 <div className='body__container__text'>
                     <h1>Available Dealerships</h1>
+                    <div className='body__container__add__dealer'>
+                        <Link href='/add_dealer'>
+                            <button>Add Dealership</button>
+                        </Link>
+                    </div>
+                    <p>Click on a dealership to view more information</p>
                     <div className='body__container__dealerships'>
                         {dealerships.map((dealership) => (
                             <div className='body__container__dealerships__card' onClick={() => handleDealershipClick(dealership)}>

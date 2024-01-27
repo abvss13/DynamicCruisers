@@ -1,0 +1,129 @@
+.add__dealer {
+  display: flex;
+  flex-direction: column;
+  font-family: cursive;
+  line-height: 1.5;
+  color: #ffffff;
+  text-align: center;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  .body__image {
+    z-index: -1;
+  }
+
+  .nav__links {
+    display: flex;
+    flex-direction: row;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    justify-content: end;
+
+    a {
+      text-decoration: none;
+      color: #ffffff;
+    }
+  }
+
+  .nav__links__container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    margin-left: 40px;
+
+    &:hover {
+      color: darkgreen;
+      cursor: pointer;
+      border-radius: 10px;
+      box-shadow: darkgreen 0px 2px;
+    }
+  }
+
+  .nav__links__container__text {
+    margin-left: 10px;
+  }
+
+  .body__container {
+    display: flex;
+    flex-direction: column;
+
+    .body__container__text {
+
+      h1 {
+        font-size: 30px;
+        color: rgb(49, 84, 55);
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 10px;
+      }
+
+      .body__container__form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+
+
+        .body__container__form__input {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          margin-top: 10px;
+
+          input {
+            width: 300px;
+            height: 30px;
+            border-radius: 10px;
+            border: none;
+            box-shadow: darkgreen 0px 2px;
+            margin-top: 10px;
+            margin-left: 30px;
+            padding-left: 10px;
+          }
+
+          label {
+            font-size: 15px;
+            color: rgb(248, 248, 248);
+            font-family: "Lucida Sans", "Lucida Sans Regular",
+              "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana,
+              sans-serif;
+            border-radius: 10px;
+            background-color: darkgreen;
+            margin-top: 10px;
+            padding: 8px;
+          }
+        }
+
+          button {
+            width: 100px;
+            height: 30px;
+            border-radius: 10px;
+            border: none;
+            box-shadow: darkgreen 0px 2px;
+            margin-top: 10px;
+            padding-left: 10px;
+            background-color: darkgreen;
+            color: #ffffff;
+            font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+              "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+
+            &:hover {
+              color: darkgreen;
+              cursor: pointer;
+              border-radius: 10px;
+              box-shadow: darkgreen 0px 2px;
+              background-color: #ffffff;
+            }
+          }
+      }
+    }
+  }
+}
