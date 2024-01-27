@@ -5,7 +5,7 @@ import { IoCarSportOutline } from 'react-icons/io5';
 import { GoCodeReview } from "react-icons/go";
 import { IoMdLogIn } from "react-icons/io";
 import { IoHomeOutline } from "react-icons/io5";
-import Background1 from '../Public/_background/Background1.jpg';
+import Background1 from '../Public/_background/Background3.jpg';
 import Link from 'next/link';
 
 
@@ -84,8 +84,6 @@ function Body() {
             <div className='body__container'>
                 <div className='body__container__text'>
                     <h1>Used and New cars for sale in Nairobi...</h1>
-                    <br />
-                    <h3>...Shop by brand...</h3>
                 </div>
             </div>
         </div >

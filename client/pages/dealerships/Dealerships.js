@@ -5,7 +5,9 @@ import { IoCarSportOutline } from 'react-icons/io5';
 import { GoCodeReview } from "react-icons/go";
 import { IoMdLogIn } from "react-icons/io";
 import { PiWarehouseBold } from 'react-icons/pi';
+import { MdDeleteOutline } from "react-icons/md";
 import Background1 from './_background/Background1.jpg';
+import { FiEdit3 } from "react-icons/fi";
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
@@ -22,6 +24,20 @@ function Dealerships() {
         fetchDealerships();
     }, []);
 
+    const deleteDealership = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:5555/dealerships/${id}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) {
+                throw new Error('Something went wrong!');
+            }
+            // Refresh the list of dealerships after a successful delete
+            setDealerships(dealerships.filter(dealership => dealership.id !== id));
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
 
     return (
@@ -105,6 +121,10 @@ function Dealerships() {
                                     <h3>Address: {dealership.address}</h3>
                                     <p>Website: {dealership.website}</p>
                                     <p>Rating: {dealership.rating}</p>
+                                    <div className='buttons'>
+                                        <button onClick={() => deleteDealership(dealership.id)}><MdDeleteOutline size={20} /></button>
+                                        <button><FiEdit3 size={20} /></button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
