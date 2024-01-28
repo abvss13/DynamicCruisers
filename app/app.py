@@ -759,4 +759,4 @@ api.add_resource(ReviewsResource, '/reviews', endpoint='reviews')
 api.add_resource(ReviewsResource, '/reviews/<int:vehicle_id>', endpoint='review')
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=5555)
