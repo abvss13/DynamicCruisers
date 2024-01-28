@@ -104,7 +104,7 @@ function Dealerships() {
                         <h3>Reviews</h3>
                     </div>
                 </Link>
-                <Link href='/dashboard' className='nav__links__container'>
+                <Link href='/login' className='nav__links__container'>
                     <div className='nav__links__container__icon'>
                         <IoMdLogIn size={30} />
                     </div>
