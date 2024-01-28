@@ -68,7 +68,8 @@ class UserResource(Resource):
                 "last_name": user.lastname,
                 "email": user.email,
                 "vehicles_owned": user.vehicles_owned,
-                "reviews": self.serialize_reviews(user.reviews)
+                "reviews": self.serialize_reviews(user.reviews),
+                "password": user.password
             }
             for user in users
         ]
@@ -96,7 +97,8 @@ class UserResource(Resource):
                 "last_name": user.lastname,
                 "email": user.email,
                 "vehicles_owned": user.vehicles_owned,
-                "reviews": self.serialize_reviews(user.reviews)
+                "reviews": self.serialize_reviews(user.reviews),
+                "password": user.password
             }
             response = make_response(
                  jsonify(user_dict),
@@ -777,4 +779,4 @@ api.add_resource(ReviewsResource, '/reviews', endpoint='reviews')
 api.add_resource(ReviewsResource, '/reviews/<int:vehicle_id>', endpoint='review')
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=5555, debug=True)
