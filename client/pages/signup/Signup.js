@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaArrowRight } from "react-icons/fa";
 import { FaUserPlus } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
@@ -6,8 +6,43 @@ import Image from 'next/image';
 import Background1 from '../../Public/_background/Background2.jpg';
 import { CiHome } from "react-icons/ci";
 import Link from 'next/link';
+import { useForm } from 'react-hook-form'
+import { useRouter} from 'next/router';
 
 function Signup() {
+    const router = useRouter();
+    const { register, handleSubmit, setError, formState } = useForm();
+
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleSignUp = async (data) => {
+        try {
+            const response = await fetch('http://127.0.0.1:5555/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const responseData = await response.json();
+            if (response.ok) {
+                // SignUp successful
+                router.push('/login'); // Redirect to login page after successful sign-up
+            } else {
+                // SignUp failed
+                setError('email', {
+                    type: 'manual',
+                    message: responseData.error || 'Sign-up failed. Please check your information.',
+                });
+            }
+        } catch (error) {
+            console.error('Error during sign-up:', error);
+            setErrorMessage('An error occurred during sign-up. Please try again.');
+        }
+    };
+
+
     return (
         <div className='signup'>
             <div className='left__pane'>
@@ -30,21 +65,21 @@ function Signup() {
                     <div className='right__pane__container__text'>
                         <h1>Welcome!</h1>
                         <p>Sign up for Greatness!!</p>
-                        <form className='right__pane__container__text__form'>
+                        <form className='right__pane__container__text__form' onSubmit={handleSubmit(handleSignUp)}>
                         <div className='right__pane__container__text__form__input'>
-                                <input type='text' placeholder='First Name...' />
+                                <input {...register('firstname')} type='text' placeholder='First Name...' />
                             </div>
                             <div className='right__pane__container__text__form__input'>
-                                <input type='text' placeholder='Last Name...' />
+                                <input {...register('lastname')} type='text' placeholder='Last Name...' />
                             </div>
                             <div className='right__pane__container__text__form__input'>
-                                <input type='text' placeholder='Email...' />
+                                <input {...register('email')} type='text' placeholder='Email...' />
                             </div>
                             <div className='right__pane__container__text__form__input'>
-                                <input type='password' placeholder='Password...' />
+                                <input {...register('password')} type='password' placeholder='Password...' />
                             </div>
                             <div className='right__pane__container__text__form__input'>
-                                <input type='password' placeholder='Repeat Password...' />
+                                <input {...register('repeatPassword')} type='password' placeholder='Repeat Password...' />
                             </div>
                             <div className='right__pane__container__text__form__input'>
                                 <button type='submit'>Sign Up <FaArrowRight size={15} /></button>

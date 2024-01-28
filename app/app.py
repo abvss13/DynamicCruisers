@@ -55,12 +55,14 @@ def login():
     password = data['password']
 
     #Authenticate the user
+    user = User.query.filter_by(email=email, password=password).first()
     if authenticate_user(email, password):
         #set a session cookie to indicate that the user is authenticated
         session['authenticated_user'] = email
 
         return jsonify({"message": "Login successful"}), 200
     else:
+        #an error message for an unsuccessful login
         return jsonify({"error": "Invalid credentials"}), 401
     
 @app.route('/protected')
