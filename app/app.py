@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask_cors import CORS
 from flask_migrate import Migrate
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError #for handling database errors
@@ -12,6 +12,9 @@ from models import db, User, Vehicle, Dealership, Review, Rating, Likes, UserVeh
 #app configuration
 app = Flask(__name__)
 CORS(app)
+
+#set a key for session management
+app.secret_key = b'secret_key'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -27,33 +30,55 @@ api = Api(app)
 @app.route('/')
 def index():
     response = make_response(jsonify({'message': 'Welcome to the Car Dealership API'}), 200)
+
+    #set a cookie in the response
+    response.set_cookie('User_id', '123', max_age=3000)#set a user_id cookie for 1 hr
     return response
 
-# @app.route('/users', methods=['GET'])
-# def get_users():
-#     users = User.query.all()
-#     users_dict = [{'id': user.id,
-#                    'firstname': user.firstname,
-#                    'lastname': user.lastname,
-#                    'email': user.email,
-#                    'reviews': user.reviews,
-#                    'vehicles_owned': user.vehicles_owned,
-#                    'reviews': user.reviews } for user in users]
-#     response = make_response(jsonify(users_dict), 200)
-#     return response
+
+#mock user authentication function
+def authenticate_user(email, password):
+    user = User.query.filter_by(email=email, password=password).first()
+    return user is not None
 
 
-# @app.route('/dealerships', methods=['GET'])
-# def get_dealerships():
-#     dealerships = Dealership.query.all()
-#     dealerships_dict = [{'id': dealership.id,
-#                          'name': dealership.name,
-#                          'address': dealership.address,
-#                          'website': dealership.website,
-#                          'rating': dealership.rating,
-#                          'vehicles': dealership.vehicles } for dealership in dealerships]
-#     response = make_response(jsonify(dealerships_dict), 200)
-    # return response
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+
+    #check if the required fields are present in the request data
+    required_fields = ['email', 'password']
+    if any(field not in data for field in required_fields):
+        return {"error": "Missing required fields"}, 400
+    
+    email = data['email']
+    password = data['password']
+
+    #Authenticate the user
+    if authenticate_user(email, password):
+        #set a session cookie to indicate that the user is authenticated
+        session['authenticated_user'] = email
+
+        return jsonify({"message": "Login successful"}), 200
+    else:
+        return jsonify({"error": "Invalid credentials"}), 401
+    
+@app.route('/protected')
+def protected_route():
+    #check if the user is authenticated based on the session cookie
+    if 'authenticated_user' in session:
+        email = session['authenticated_user']
+        return jsonify({"message": f"Hello, {email}! This is a protected route."}), 200
+    else:
+        return jsonify({"error": "Unauthorized. Please log in."}), 401
+
+@app.route('/logout')
+def logout():
+    #Clear the session cookie to log the user out
+    session.pop('authenticated_user', None)
+    return jsonify({"Message": "Logout successful"}), 200
+
+
 class UserResource(Resource):
     def get(self, user_id=None):
         if user_id is not None:
@@ -165,49 +190,6 @@ api.add_resource(UserResource, '/users', endpoint='users')
 api.add_resource(UserResource, '/users/<int:user_id>', endpoint='user')
 
 
-
-# Dealerships Routes
-# class DealershipsResource(Resource):
-#     def get(self):
-#         dealerships = Dealership.query.all()
-#         dealerships_list = [
-#             {
-#                 "id": dealership.id,
-#                 "name": dealership.name,
-#                 "address": dealership.address,
-#                 "website": dealership.website,
-#                 "rating": dealership.rating,
-#                 # Include other dealership attributes as needed
-#             } for dealership in dealerships
-#         ]
-#         return jsonify(dealerships_list)
-
-#     def post(self):
-#         data = request.get_json()
-
-#         dealership = Dealership(
-#             name=data['name'],
-#             address=data['address'],
-#             website=data['website'],
-#             rating=data['rating']
-#         )
-
-#         db.session.add(dealership)
-#         db.session.commit()
-
-#         dealership_dict = {
-#             "id": dealership.id,
-#             "name": dealership.name,
-#             "address": dealership.address,
-#             "website": dealership.website,
-#             "rating": dealership.rating,
-#         }
-
-#         response = make_response(jsonify(dealership_dict), 201)  # 201 Created
-#         return response
-
-# api.add_resource(DealershipsResource, '/dealerships', endpoint='dealerships')
-# api.add_resource(DealershipsResource, '/dealerships/<int:dealership_id>', endpoint='dealership')
 
 # Vehicles Routes
 class VehiclesResource(Resource):
