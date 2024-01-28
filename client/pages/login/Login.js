@@ -4,6 +4,8 @@ import { FaUserPlus } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import Image from 'next/image';
 import Background1 from '../../Public/_background/Background2.jpg';
+import { CiHome } from "react-icons/ci";
+import Link from 'next/link';
 
 function Login() {
     return (
@@ -19,7 +21,7 @@ function Login() {
                         <h1>Dynamic Cruisers</h1>
                     </div>
                     <div className='right__pane__container__text__form__input'>
-                        <p>Don't have an account? <a href='/signup'>Sign Up</a></p>
+                        <p>Don't have an account? <Link href='/signup'>Sign Up</Link></p>
                     </div>
                 </div>
             </div>
@@ -39,9 +41,12 @@ function Login() {
                                 <button type='submit'>Login <FaArrowRight size={15} /></button>
                             </div>
                             <div className='right__pane__container__text__form__input'>
-                                <a href='/forgotpassword'>Forgot Password?</a>
+                                <Link href='/forgotpassword'>Forgot Password?</Link>
                             </div>
                         </form>
+                        <div className='back__home'>
+                            <Link href='/'> <CiHome size={50} color='white' strokeWidth={2} /></Link>
+                        </div>
                     </div>
                 </div>
             </div>
