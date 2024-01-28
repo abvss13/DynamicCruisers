@@ -3,11 +3,13 @@ import { FaArrowRight } from "react-icons/fa";
 import { FaUserPlus } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import Image from 'next/image';
-import Background1 from '../../Public/_background/Background2.jpg';
 import { CiHome } from "react-icons/ci";
 import Link from 'next/link';
 
+
 function Login() {
+
+
     return (
         <div className='login'>
             <div className='left__pane'>
@@ -30,7 +32,7 @@ function Login() {
                     <div className='right__pane__container__text'>
                         <h1>Welcome Back!</h1>
                         <p>Sign in to your account to continue</p>
-                        <form className='right__pane__container__text__form'>
+                        <form className='right__pane__container__text__form' >
                             <div className='right__pane__container__text__form__input'>
                                 <input type='text' placeholder='Email...' />
                             </div>
