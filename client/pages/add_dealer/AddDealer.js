@@ -77,7 +77,7 @@ function AddDealer() {
                                     <input type="text" name="address" id="address" placeholder='address' />
                                 </div>
                                 <div className='body__container__form__input'>
-                                    <input type="text" name="city" id="city" placeholder='city' />
+                                    <input type="text" name="website" id="website" placeholder='website' />
                                 </div>
                                 <div className='submit__button'>
                                     <button type="submit">Submit</button>
