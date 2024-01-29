@@ -4,7 +4,8 @@ from flask_migrate import Migrate
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError #for handling database errors
 from flask import jsonify, request, make_response
 from flask_restful import Api, Resource
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 
 from models import db, User, Vehicle, Dealership, Review, Rating, Likes, UserVehicle, VehicleDealership
@@ -16,7 +17,7 @@ CORS(app)
 #set a key for session management
 app.secret_key = b'secret_key'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'DATABASE_URI'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
@@ -45,7 +46,7 @@ def authenticate_user(email, password):
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-
+    print(data)
     #check if the required fields are present in the request data
     required_fields = ['email', 'password']
     if any(field not in data for field in required_fields):
@@ -55,14 +56,17 @@ def login():
     password = data['password']
 
     #Authenticate the user
-    user = User.query.filter_by(email=email, password=password).first()
-    if authenticate_user(email, password):
+    user = User.query.filter_by(email=email).first()
+    # hashed_password = generate_password_hash(data['password'], method='sha256')
+
+    if user and check_password_hash(user.password, data['password']):
         #set a session cookie to indicate that the user is authenticated
         session['authenticated_user'] = email
-
+        print("logged in")
         return jsonify({"message": "Login successful"}), 200
     else:
         #an error message for an unsuccessful login
+        print("login error") 
         return jsonify({"error": "Invalid credentials"}), 401
     
 @app.route('/protected')
@@ -135,43 +139,40 @@ class UserResource(Resource):
         else:
             return jsonify({"error": f"User with id {user_id} not found"}), 404
         
-
     def post(self):
-            data = request.get_json()
+        data = request.get_json()
 
-            # Check if required fields are present in the request data
-            required_fields = ['firstname', 'lastname', 'email']
-            missing_fields = [field for field in required_fields if field not in data]
-            if missing_fields:
-                error_message = f"Missing keys: {','.join(missing_fields)}"
-                return {"error": error_message}, 400
+        # Check if required fields are present in the request data
+        required_fields = ['name', 'address', 'website']
+        missing_fields = [field for field in required_fields if field not in data]
+        if missing_fields:
+            error_message = f"Missing keys: {','.join(missing_fields)}"
+            return {"error": error_message}, 400
 
-            # Create a new user instance
-            hashed_password = generate_password_hash(data['password'], method='sha256')
-            new_user = User(
-                firstname=data['firstname'],
-                lastname=data['lastname'],
-                email=data['email'],
-                password=hashed_password
-                
-            )
+        # Create a new dealership instance
+        new_dealership = Dealership(
+            name=data['name'],
+            address=data['address'],
+            website=data['website']
+            # Add other fields as needed
+        )
 
-            # Add the new user to the database
-            db.session.add(new_user)
-            db.session.commit()
+        # Add the new dealership to the database
+        db.session.add(new_dealership)
+        db.session.commit()
 
-            # Return the newly created user as a response
-            user_list= {
-                "id": new_user.id,
-                "first_name": new_user.firstname,
-                "last_name": new_user.lastname,
-                "email": new_user.email,
-                "vehicles_owned": new_user.vehicles_owned,
-                "reviews": self.serialize_reviews(new_user.reviews)
-            }
+        # Return the newly created dealership as a response
+        dealership_data = {
+            "id": new_dealership.id,
+            "name": new_dealership.name,
+            "address": new_dealership.address,
+            "website": new_dealership.website
+            # Add other fields as needed
+        }
 
-            response = make_response(jsonify(user_list), 201)  # 201 Created
-            return response
+        response = make_response(jsonify(dealership_data), 201)  # 201 Created
+        return response
+    
     
     #delete a user
     def delete(self, user_id):
