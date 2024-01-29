@@ -140,8 +140,8 @@ function Dealerships() {
                         <p>Website: {selectedDealership.website}</p>
                         <p>Rating: {selectedDealership.rating}</p>
                         <div className='buttons'>
-                            <button onClick={() => deleteDealership(dealership.id)}><MdDeleteOutline size={20} /></button>
-                            <button onClick={() => editDealership(dealership.id)}><FiEdit3 size={20} /></button>
+                            <button onClick={() => deleteDealership(selectedDealership.id)}><MdDeleteOutline size={20} /></button>
+                            <button onClick={() => editDealership(selectedDealership.id)}><FiEdit3 size={20} /></button>
                         </div>
                     </div>
                 )}

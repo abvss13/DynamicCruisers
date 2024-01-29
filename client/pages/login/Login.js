@@ -29,7 +29,7 @@ function Login() {
             const responseData = await response.json();
             if (response.ok) {
                 //Login successful
-                router.push('/dashboard');
+                router.push('/');
             } else {
                 //Login failed
                 setErrorMessage(responseData.error || "Login failed. Please enter the correct email and password.");

@@ -158,8 +158,8 @@ function Vehicles() {
                             <h3>{selectedVehicle.year}</h3>
                             <h4>{selectedVehicle.price}</h4>
                             <div className='buttons'>
-                                <button onClick={() => deleteVehicle(vehicle.id)}><MdDeleteOutline size={20} /></button>
-                                <button onClick={() => editVehicle(vehicle.id)}><FiEdit3 size={20} /></button>
+                                <button onClick={() => deleteVehicle(selectedVehicle.id)}><MdDeleteOutline size={20} /></button>
+                                <button onClick={() => editVehicle(selectedVehicle.id)}><FiEdit3 size={20} /></button>
                             </div>
                         </div>
                     </div>
